@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[39756,["/oikos-cinematic/_next/static/chunks/01xlw8hd842-c.js","/oikos-cinematic/_next/static/chunks/0d3shmwh5_nmn.js"],"default"]
+3:I[37457,["/oikos-cinematic/_next/static/chunks/01xlw8hd842-c.js","/oikos-cinematic/_next/static/chunks/0d3shmwh5_nmn.js"],"default"]
+:HL["/oikos-cinematic/_next/static/chunks/0h~l4gcnz47pk.css","style"]
+:HL["/oikos-cinematic/_next/static/chunks/03edslksc~-eb.css","style"]
+0:{"rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/oikos-cinematic/_next/static/chunks/0h~l4gcnz47pk.css","precedence":"next"}],["$","link","1",{"rel":"stylesheet","href":"/oikos-cinematic/_next/static/chunks/03edslksc~-eb.css","precedence":"next"}]],["$","div",null,{"className":"fraunces_1915e554-module__myLvQa__variable inter_18154246-module__n5x50W__variable","children":["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"mkkc8FlbvnS26AIybgEOu"}
