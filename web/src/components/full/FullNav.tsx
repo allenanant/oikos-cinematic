@@ -1,8 +1,25 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function FullNav() {
+  const [onLight, setOnLight] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      // Hero is pinned for +=140% of viewport, so cream sections start past ~120vh.
+      // Switch to the dark-glass treatment once we are clearly off the hero photo.
+      setOnLight(window.scrollY > window.innerHeight * 1.05);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="full-navbar">
+    <header className={`full-navbar${onLight ? " on-light" : ""}`}>
       <nav className="full-pill" aria-label="Primary">
         <a href={`${BASE}/cinematic/`} className="brand">
           <span className="dot" />

@@ -42,7 +42,7 @@
   font-size: 13px;
   letter-spacing: 0.15px;
   color: rgba(255, 248, 235, 0.95);
-  /* liquid glass */
+  /* liquid glass — defaults to the dark-hero tint */
   background: rgba(20, 30, 22, 0.32);
   backdrop-filter: blur(22px) saturate(1.8) brightness(1.02);
   -webkit-backdrop-filter: blur(22px) saturate(1.8) brightness(1.02);
@@ -54,6 +54,20 @@
     0 10px 32px rgba(11, 25, 14, 0.22),
     0 24px 60px rgba(11, 25, 14, 0.18);
   isolation: isolate;
+  transition: background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+}
+/* Over cream / light sections — pour darker forest glass so the pill reads */
+.full-navbar.on-light .full-pill {
+  background: rgba(11, 47, 17, 0.78);
+  border-color: rgba(11, 47, 17, 0.62);
+  box-shadow:
+    0 1px 0 rgba(255, 248, 235, 0.14) inset,
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 14px 36px rgba(11, 25, 14, 0.18),
+    0 30px 70px rgba(11, 25, 14, 0.14);
+}
+.full-navbar.on-light .full-pill .divider {
+  background: rgba(255, 248, 235, 0.20);
 }
 /* very subtle highlight curl across the top of the pill */
 .full-pill::before {
