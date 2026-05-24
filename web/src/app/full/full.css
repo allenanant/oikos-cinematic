@@ -780,62 +780,108 @@
   padding: 6px 12px; border-radius: 999px;
 }
 
-/* ============ I. CONSULT ============ */
+/* ============ I. CONSULT — boutique reservation card ============ */
 .full-consult { padding: 0; }
 .full-consult-shell {
   margin: 0 auto; max-width: var(--container);
-  padding: clamp(40px, 6vh, 80px) var(--gut);
+  padding: clamp(60px, 9vh, 110px) var(--gut);
 }
 .full-consult .frame {
   position: relative; overflow: hidden;
   color: var(--color-cream);
-  min-height: clamp(560px, 80vh, 820px);
-  display: flex; flex-direction: column; justify-content: flex-end;
-  border-radius: 2px; background: var(--color-forest);
+  border-radius: 4px;
+  background: var(--color-forest);
+  padding: clamp(56px, 8vh, 96px) clamp(40px, 6vw, 88px);
+  display: flex; flex-direction: column;
+  gap: clamp(40px, 6vh, 72px);
 }
 .full-consult .frame .bg { position: absolute; inset: 0; z-index: 0; }
 .full-consult .frame .bg img {
   width: 100%; height: 100%; object-fit: cover;
-  filter: saturate(0.85) contrast(1.05) brightness(0.6);
+  filter: saturate(0.85) contrast(1.05) brightness(0.45);
 }
 .full-consult .frame .bg::after {
   content: ""; position: absolute; inset: 0;
-  background: radial-gradient(120% 100% at 30% 100%, rgba(11, 57, 16, 0.78), rgba(11, 57, 16, 0.4) 60%, rgba(11, 57, 16, 0.15));
+  background:
+    linear-gradient(180deg, rgba(11, 57, 16, 0.55) 0%, rgba(11, 57, 16, 0.85) 70%, rgba(11, 57, 16, 0.92) 100%),
+    radial-gradient(80% 60% at 80% 0%, rgba(11, 57, 16, 0.0) 0%, rgba(11, 57, 16, 0.4) 100%);
 }
-.full-consult .frame .inner {
+
+/* HEAD — eyebrow, headline, dek */
+.full-consult .frame .head {
   position: relative; z-index: 2;
-  padding: clamp(60px, 9vh, 120px) clamp(40px, 7vw, 100px);
-  display: grid; grid-template-columns: 1.6fr 1fr;
-  gap: 80px; align-items: end;
+  display: flex; flex-direction: column;
+  gap: 22px;
+  max-width: 64ch;
 }
-.full-consult .frame .inner .left { display: flex; flex-direction: column; gap: 18px; }
-.full-consult .frame .inner h2 {
+.full-consult .frame .head h2 {
   font-family: var(--font-editorial), Georgia, serif;
-  font-weight: 400; font-size: clamp(44px, 6.2vw, 108px);
-  line-height: 1.02; letter-spacing: -0.02em;
+  font-weight: 400;
+  font-size: clamp(34px, 4vw, 64px);
+  line-height: 1.06;
+  letter-spacing: -0.018em;
 }
-.full-consult .frame .inner h2 em { font-style: italic; color: var(--color-gold); }
-.full-consult .frame .inner .row {
-  margin-top: 40px;
-  display: flex; gap: 18px; flex-wrap: wrap; align-items: center;
+.full-consult .frame .head h2 em {
+  font-style: italic; color: var(--color-gold);
 }
-.full-consult .frame .inner .cta {
+.full-consult .frame .head .dek {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-style: italic;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.6; color: var(--cream-78);
+  max-width: 56ch;
+}
+
+/* FOOT — details on the left, actions on the right, on one quiet row */
+.full-consult .frame .foot {
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: 1.4fr auto;
+  gap: clamp(36px, 5vw, 72px);
+  align-items: end;
+  padding-top: clamp(28px, 4vh, 44px);
+  border-top: 1px solid rgba(255, 248, 235, 0.18);
+}
+.full-consult .frame .foot .details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(20px, 2vw, 36px);
+}
+.full-consult .frame .foot .item .lab {
+  color: var(--cream-55);
+}
+.full-consult .frame .foot .item .val {
+  margin-top: 8px;
+  font-family: var(--font-sans);
+  font-size: 14px; color: rgba(255, 248, 235, 0.92);
+  line-height: 1.45;
+}
+.full-consult .frame .foot .item .val em {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-style: italic; color: var(--color-gold); font-size: 16px;
+}
+
+.full-consult .frame .foot .actions {
+  display: flex; gap: 18px; align-items: center; flex-wrap: wrap;
+  justify-self: end;
+}
+.full-consult .frame .foot .cta {
   display: inline-flex; align-items: center; gap: 10px;
-  padding: 12px 20px;
-  background: var(--color-cream); color: var(--ink);
+  padding: 13px 22px;
+  background: var(--color-cream); color: var(--color-forest);
   border-radius: 999px;
   font-family: var(--font-sans);
   font-size: 13px; font-weight: 500; letter-spacing: 0.1px;
   transition: transform 0.35s cubic-bezier(0.7, 0, 0.2, 1), background 0.25s;
 }
-.full-consult .frame .inner .cta:hover { transform: translateY(-1px); background: #fff; }
-.full-consult .frame .inner .cta .arr {
+.full-consult .frame .foot .cta:hover { transform: translateY(-1px); background: #fff; }
+.full-consult .frame .foot .cta .arr {
   width: 13px; height: 13px;
   border-right: 1px solid currentColor; border-top: 1px solid currentColor;
   transform: rotate(45deg); margin-left: 2px; transition: transform 0.35s;
 }
-.full-consult .frame .inner .cta:hover .arr { transform: rotate(45deg) translate(2px, -2px); }
-.full-consult .frame .inner .ghost {
+.full-consult .frame .foot .cta:hover .arr { transform: rotate(45deg) translate(2px, -2px); }
+.full-consult .frame .foot .ghost {
   display: inline-flex; align-items: center; gap: 10px;
   color: var(--color-cream);
   font-family: var(--font-sans);
@@ -844,35 +890,9 @@
   border-bottom: 1px solid rgba(255, 248, 235, 0.32);
   transition: border-color 0.3s, color 0.3s;
 }
-.full-consult .frame .inner .ghost:hover { color: var(--color-gold); border-color: var(--color-gold); }
-.full-consult .frame .inner .ghost::after { content: "→"; transition: transform 0.35s; }
-.full-consult .frame .inner .ghost:hover::after { transform: translateX(4px); }
-.full-consult .frame .inner .right {
-  display: flex; flex-direction: column; gap: 18px;
-  border-top: 1px solid var(--rule-light); padding-top: 20px;
-}
-.full-consult .frame .inner .right p {
-  font-family: var(--font-editorial), Georgia, serif;
-  font-style: italic; font-size: 19px;
-  line-height: 1.55; color: var(--cream-78); max-width: 380px;
-}
-.full-consult .frame .inner .right .grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 18px; margin-top: 8px;
-}
-.full-consult .frame .inner .right .grid .item {
-  border-top: 1px solid var(--rule-light); padding-top: 12px;
-}
-.full-consult .frame .inner .right .grid .item .lab { color: var(--cream-55); }
-.full-consult .frame .inner .right .grid .item .val {
-  margin-top: 6px;
-  font-family: var(--font-sans);
-  font-size: 14px; color: rgba(255, 248, 235, 0.86); line-height: 1.45;
-}
-.full-consult .frame .inner .right .grid .item .val em {
-  font-family: var(--font-editorial), Georgia, serif;
-  font-style: italic; color: var(--color-gold); font-size: 16px;
-}
+.full-consult .frame .foot .ghost:hover { color: var(--color-gold); border-color: var(--color-gold); }
+.full-consult .frame .foot .ghost::after { content: "→"; transition: transform 0.35s; }
+.full-consult .frame .foot .ghost:hover::after { transform: translateX(4px); }
 
 /* ============ FOOTER ============ */
 .full-foot {
@@ -943,7 +963,9 @@
   .full-philos .list { grid-column: 1 / 13; }
   .full-spread .t-img, .full-spread .f-img { grid-column: 1 / 13; max-width: 520px; }
   .full-spread .t-body, .full-spread .f-body { grid-column: 1 / 13; padding: 0; }
-  .full-consult .frame .inner { grid-template-columns: 1fr; gap: 40px; }
+  .full-consult .frame .foot { grid-template-columns: 1fr; gap: 36px; align-items: start; }
+  .full-consult .frame .foot .actions { justify-self: start; }
+  .full-consult .frame .foot .details { grid-template-columns: repeat(2, 1fr); gap: 24px; }
 }
 @media (max-width: 780px) {
   .full-root { --gut: 22px; }

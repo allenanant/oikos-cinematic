@@ -41,62 +41,57 @@ export default function Consult() {
   return (
     <section className="full-consult" id="brief">
       <div className="full-consult-shell">
-        <div className="frame" data-reveal>
+        <article className="frame" data-reveal>
           <div className="bg">
             <img
               src="https://images.pexels.com/photos/35215429/pexels-photo-35215429/free-photo-of-elegant-indoor-space-with-vertical-garden.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1600&fit=crop"
               alt=""
             />
           </div>
-          <div className="inner">
-            <div className="left">
-              <span className="lab on-dark">
-                <span className="bar" /> vii.{" "}
-                <span
-                  className="num"
-                  style={{ color: "var(--color-gold)" }}
-                >
-                  — a brief is the beginning
-                </span>
-              </span>
-              <h2>
-                Tell us about the <em>floor</em>,
-                <br /> the <em>building</em>, the <em>climate</em>
-                <br /> your team works inside.
-              </h2>
-              <div className="row">
-                <a
-                  href="mailto:studio@oikos.in"
-                  className="cta"
-                  data-cursor
-                >
-                  Begin a brief <span className="arr" />
-                </a>
-                <a
-                  href={`${BASE}/spaces/`}
-                  className="ghost"
-                  data-cursor
-                >
-                  See the atelier
-                </a>
-              </div>
+
+          <header className="head">
+            <span className="lab on-dark">
+              <span className="bar" /> vii.{" "}
+              <span className="num">— a brief is the beginning</span>
+            </span>
+            <h2>
+              Tell us about the <em>floor</em>, the <em>building</em>,
+              <br />
+              the <em>climate</em> your team works inside.
+            </h2>
+            <p className="dek">
+              We take on four restructures a quarter. Briefs open every March,
+              June, September and December — written, never templated.
+            </p>
+          </header>
+
+          <footer className="foot">
+            <div className="details">
+              {ITEMS.map((i, k) => (
+                <div className="item" key={k}>
+                  <div className="lab on-dark">{i.lab}</div>
+                  <div className="val">{i.val}</div>
+                </div>
+              ))}
             </div>
-            <div className="right">
-              <p>
-                We take on four restructures a quarter. Briefs open every
-                March, June, September and December — written, never templated.
-              </p>
-              <div className="grid">
-                {ITEMS.map((i, k) => (
-                  <div className="item" key={k}>
-                    <div className="lab on-dark">{i.lab}</div>
-                    <div className="val">{i.val}</div>
-                  </div>
-                ))}
-              </div>
+            <div className="actions">
+              <a
+                href="mailto:studio@oikos.in"
+                className="cta"
+                data-cursor
+              >
+                Begin a brief <span className="arr" />
+              </a>
+              <a
+                href={`${BASE}/spaces/`}
+                className="ghost"
+                data-cursor
+              >
+                See the atelier
+              </a>
             </div>
-          </div>
-        </div>
+          </footer>
+        </article>
       </div>
     </section>
   );

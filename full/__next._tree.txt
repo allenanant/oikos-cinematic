@@ -1,7 +1,7 @@
 :HL["/oikos-cinematic/_next/static/chunks/185mb~10lx1vz.css","style"]
 :HL["/oikos-cinematic/_next/static/chunks/0tt.lu4r0k2~b.css","style"]
 :HL["/oikos-cinematic/_next/static/chunks/0kk7wae~9ull1.css","style"]
-:HL["/oikos-cinematic/_next/static/chunks/0bve-u.sm3~sa.css","style"]
+:HL["/oikos-cinematic/_next/static/chunks/0o6vd.0-6qrje.css","style"]
 :HL["/oikos-cinematic/_next/static/media/01e4147cff8141ee-s.p.10ked.7w885.g.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/oikos-cinematic/_next/static/media/03bda585a99c6450-s.p.0zzh68k1~whtc.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/oikos-cinematic/_next/static/media/3c7c6164b2587822-s.p.0duriy8536ewt.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
@@ -23,4 +23,4 @@
 :HL["https://images.pexels.com/photos/28517487/pexels-photo-28517487/free-photo-of-portrait-of-young-woman-with-soft-lighting.jpeg?auto=compress&cs=tinysrgb&w=1400&h=1750&fit=crop","image"]
 :HL["https://images.pexels.com/photos/34472106/pexels-photo-34472106/free-photo-of-serene-portrait-of-smiling-woman-in-sunlight.jpeg?auto=compress&cs=tinysrgb&w=1400&h=1750&fit=crop","image"]
 :HL["https://images.pexels.com/photos/35215429/pexels-photo-35215429/free-photo-of-elegant-indoor-space-with-vertical-garden.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1600&fit=crop","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"full","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"Mo5EN4UKmjOtlqerpMNzZ"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"full","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"8jolOmbRiF-c1l3uMT1sj"}
