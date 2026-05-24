@@ -9,8 +9,6 @@ export default function FullNav() {
 
   useEffect(() => {
     const onScroll = () => {
-      // Hero is pinned for +=140% of viewport, so cream sections start past ~120vh.
-      // Switch to the dark-glass treatment once we are clearly off the hero photo.
       setOnLight(window.scrollY > window.innerHeight * 1.05);
     };
     onScroll();
@@ -21,9 +19,16 @@ export default function FullNav() {
   return (
     <header className={`full-navbar${onLight ? " on-light" : ""}`}>
       <nav className="full-pill" aria-label="Primary">
-        <a href={`${BASE}/cinematic/`} className="brand">
-          <span className="dot" />
-          <span>oikos</span>
+        <a
+          href={`${BASE}/cinematic/`}
+          className="brand"
+          aria-label="Oikos — Studio 001"
+        >
+          <img
+            src={`${BASE}/logo-light.svg`}
+            alt="Oikos"
+            className="logo"
+          />
         </a>
         <span className="divider" aria-hidden />
         <div className="links">
