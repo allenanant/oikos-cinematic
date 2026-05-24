@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Oikos — A studio for biophilic workplaces.</title>
+<meta name="description" content="A working studio for biophilic workplaces. Quieter rooms, denser air, slower light." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    /* surface */
+    --ivory:#F5EFE0;
+    --cream:#FAF6EC;
+    --bone:#ECE3CC;
+    --stone:#C9BEA9;
+    --paper:#F4EEDD;
+    /* ink */
+    --ink:#1F2419;
+    --forest:#1A3A1F;
+    --soft-ink:#2B3026;
+    /* accent */
+    --terracotta:#B46A2C;
+    --bronze:#966C3B;
+    --honey:#DA9B66;
+    --gold:#E4C58A;
+    --olive:#5C6B4A;
+    --walnut:#5C4634;
+    /* alpha */
+    --ink-70:rgba(31,36,25,.7);
+    --ink-55:rgba(31,36,25,.55);
+    --ink-40:rgba(31,36,25,.4);
+    --rule:rgba(31,36,25,.12);
+    --rule-strong:rgba(31,36,25,.22);
+    --cream-70:rgba(245,239,224,.78);
+    --cream-55:rgba(245,239,224,.55);
+    --rule-light:rgba(245,239,224,.16);
+
+    /* spacing system */
+    --gut: clamp(28px, 5vw, 80px);
+    --sec-y: clamp(96px, 14vh, 168px);
+    --container: 1480px;
+    --measure: 62ch;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  html,body{background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{font-feature-settings:"ss01" 1,"ss02" 1,"liga" 1,"calt" 1;line-height:1.5}
+  img,video{display:block;max-width:100%}
+  .serif{font-family:'Cormorant Garamond',serif;font-weight:400}
+  .ital{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400}
+  ::selection{background:var(--terracotta);color:var(--cream)}
+
+  .container{max-width:var(--container);margin:0 auto;padding:0 var(--gut)}
+  .lab{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-55);font-weight:400}
+  .lab .bar{display:inline-block;width:28px;height:1px;background:var(--terracotta);vertical-align:middle;margin-right:14px}
+  .lab.on-dark{color:var(--cream-55)}
+
+  /* ============ NAV ============ */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:36px;
+    padding:22px var(--gut);font-size:13px;letter-spacing:.2px;
+    transition:padding .45s ease, background .45s ease, backdrop-filter .45s ease, color .45s ease;
+    color:var(--cream);
+  }
+  .nav.scrolled{
+    padding:14px var(--gut);
+    background:rgba(15,42,18,.6);
+    backdrop-filter:blur(16px) saturate(1.2);
+    border-bottom:1px solid var(--rule-light);
+  }
+  .nav.light{color:var(--ink)}
+  .nav.light.scrolled{background:rgba(250,246,236,.86);border-bottom:1px solid var(--rule)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:500;letter-spacing:-.3px;font-size:18px;color:inherit;text-decoration:none}
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--terracotta);box-shadow:0 0 0 3px rgba(180,106,44,.18)}
+  .links{display:flex;justify-content:center;gap:34px}
+  .links a{color:inherit;text-decoration:none;opacity:.78;position:relative;padding:6px 0;transition:opacity .25s}
+  .links a:hover{opacity:1}
+  .links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--terracotta);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.7,0,.2,1)}
+  .links a:hover::after{transform:scaleX(1)}
+  .right{justify-self:end;display:flex;align-items:center;gap:18px}
+  .right .meta{color:rgba(250,246,236,.55);font-size:12px;letter-spacing:.3px;display:flex;align-items:center;gap:8px}
+  .nav.light .right .meta{color:var(--ink-55)}
+  .right .meta .pulse{width:6px;height:6px;border-radius:50%;background:var(--terracotta);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.2)}}
+  .cta{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;background:var(--cream);color:var(--ink);border-radius:999px;text-decoration:none;font-size:13px;font-weight:500;letter-spacing:.1px;transition:transform .35s cubic-bezier(.7,0,.2,1), background .25s, color .25s}
+  .nav.light .cta{background:var(--ink);color:var(--cream)}
+  .cta:hover{transform:translateY(-1px)}
+  .cta .arr{width:13px;height:13px;border-right:1px solid currentColor;border-top:1px solid currentColor;transform:rotate(45deg);margin-left:2px;transition:transform .35s}
+  .cta:hover .arr{transform:rotate(45deg) translate(2px,-2px)}
+
+  /* ============ HERO (matches finalized cinematic) ============ */
+  .hero{position:relative;min-height:100svh;height:100svh;width:100%;overflow:hidden;background:var(--forest)}
+  .hero-media{position:absolute;inset:0}
+  .hero-media video, .hero-media img{
+    width:100%;height:100%;object-fit:cover;
+    filter:saturate(.92) contrast(1.04) brightness(.78);
+  }
+  .hero-overlay{
+    position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(120% 60% at 50% 100%, rgba(15,42,18,.78), transparent 60%),
+      linear-gradient(180deg, rgba(15,42,18,.42) 0%, rgba(15,42,18,.12) 30%, rgba(15,42,18,.7) 100%);
+  }
+  .hero-grain{
+    position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;opacity:.45;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .hero-inner{
+    position:relative;z-index:3;height:100%;
+    padding:140px var(--gut) 64px;
+    display:flex;flex-direction:column;justify-content:space-between;color:var(--cream);
+  }
+  .hero-tag{display:inline-flex;align-items:center;gap:14px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(250,246,236,.72);opacity:0}
+  .hero-tag .bar{width:32px;height:1px;background:var(--terracotta)}
+  .hero-tag em{font-style:normal;color:var(--terracotta);letter-spacing:3px}
+  h1.hero-title{
+    font-family:'Inter',sans-serif;font-weight:200;
+    font-size:clamp(54px,8.6vw,148px);line-height:.94;letter-spacing:-4px;
+    margin-top:auto;
+  }
+  h1.hero-title .row{display:block;overflow:hidden;padding-bottom:6px}
+  h1.hero-title .row > span{display:inline-block;will-change:transform}
+  h1.hero-title em{font-family:'Cormorant Garamond';font-style:italic;font-weight:400;color:var(--terracotta);letter-spacing:-2px;font-size:1.04em}
+  .hero-bottom{
+    display:grid;grid-template-columns:1.4fr 1fr auto;align-items:end;gap:60px;margin-top:36px;
+  }
+  .hero-lede{display:flex;flex-direction:column;gap:24px;max-width:560px;opacity:0}
+  .hero-lede p{font-size:16.5px;line-height:1.6;color:rgba(250,246,236,.82);max-width:480px}
+  .hero-lede p em{font-family:'Cormorant Garamond';font-style:italic;color:var(--gold);font-size:1.06em}
+  .hero-cta-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .cta.dark{background:var(--terracotta);color:var(--cream)}
+  .cta.dark:hover{background:#c87432}
+  .ghost{
+    display:inline-flex;align-items:center;gap:10px;color:var(--cream);font-size:13px;
+    text-decoration:none;padding:11px 4px;border-bottom:1px solid rgba(250,246,236,.32);
+    transition:border-color .3s, color .3s;
+  }
+  .ghost:hover{border-color:var(--gold);color:var(--gold)}
+  .ghost::after{content:"→";transition:transform .35s cubic-bezier(.7,0,.2,1)}
+  .ghost:hover::after{transform:translateX(4px)}
+  .hero-meta{opacity:0;border-top:1px solid var(--rule-light);padding-top:18px;display:flex;flex-direction:column;gap:6px;max-width:280px}
+  .hero-meta .lab{color:var(--cream-55)}
+  .hero-meta .val{font-size:14px;color:rgba(250,246,236,.86);line-height:1.5}
+  .hero-meta .val em{font-family:'Cormorant Garamond';font-style:italic;color:var(--gold);font-size:1.06em}
+  .scroll-cue{display:flex;flex-direction:column;align-items:center;gap:12px;color:rgba(250,246,236,.55);font-size:10.5px;letter-spacing:2.6px;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);opacity:0}
+  .scroll-cue .track{width:1px;height:64px;background:rgba(250,246,236,.18);position:relative;overflow:hidden}
+  .scroll-cue .track::before{content:"";position:absolute;top:-30%;left:0;width:1px;height:30%;background:var(--terracotta);animation:slide 2.2s cubic-bezier(.7,0,.2,1) infinite}
+  @keyframes slide{0%{top:-30%}100%{top:130%}}
+
+  /* ============ STATEMENT (large editorial intro) ============ */
+  .statement{padding:var(--sec-y) 0;background:var(--cream)}
+  .statement .grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(40px,7vw,120px);align-items:start}
+  .statement h2{
+    font-family:'Cormorant Garamond',serif;font-weight:400;
+    font-size:clamp(36px,4.6vw,72px);line-height:1.08;letter-spacing:-1.6px;color:var(--ink);
+    max-width:18ch;
+  }
+  .statement h2 em{font-style:italic;color:var(--terracotta)}
+  .statement h2 .q{color:var(--ink-40)}
+  .statement .body{max-width:560px;display:flex;flex-direction:column;gap:22px}
+  .statement .body p{font-size:17px;line-height:1.7;color:var(--ink-70)}
+  .statement .body p em{font-family:'Cormorant Garamond';font-style:italic;color:var(--walnut);font-size:1.08em}
+  .statement .body .sig{margin-top:14px;display:flex;align-items:center;gap:18px;font-size:12px;letter-spacing:2.6px;text-transform:uppercase;color:var(--ink-55)}
+  .statement .body .sig .bar{width:42px;height:1px;background:var(--terracotta)}
+  .statement .body .sig em{font-family:'Cormorant Garamond';font-style:italic;color:var(--walnut);font-size:15px;letter-spacing:.2px;text-transform:none}
+
+  /* ============ SIGNATURE PRACTICE (3-up cinematic cards) ============ */
+  .signature{padding:var(--sec-y) 0;background:var(--ivory);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .signature .head{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-bottom:clamp(50px,7vh,90px)}
+  .signature h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,4.4vw,64px);line-height:1.04;letter-spacing:-1.4px;max-width:14ch}
+  .signature h3 em{font-style:italic;color:var(--terracotta)}
+  .signature .note{font-size:15px;line-height:1.6;color:var(--ink-70);max-width:380px;text-align:right}
+  .signature .row{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:clamp(20px,2.4vw,36px);align-items:stretch}
+  .work{
+    position:relative;display:flex;flex-direction:column;gap:18px;text-decoration:none;color:var(--ink);
+    transition:transform .6s cubic-bezier(.7,0,.2,1);
+  }
+  .work:hover{transform:translateY(-4px)}
+  .work .img{position:relative;overflow:hidden;border-radius:2px;aspect-ratio:4/5;background:var(--bone)}
+  .work.feature .img{aspect-ratio:5/6;min-height:520px}
+  .work .img img{width:100%;height:100%;object-fit:cover;filter:saturate(.92) contrast(1.04) brightness(.92);transition:transform 1.6s cubic-bezier(.7,0,.2,1)}
+  .work:hover .img img{transform:scale(1.04)}
+  .work .img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, transparent 50%, rgba(15,42,18,.18) 100%)}
+  .work .img .tag{position:absolute;top:18px;left:18px;font-size:10.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--cream);background:rgba(31,36,25,.55);backdrop-filter:blur(8px);padding:6px 12px;border-radius:999px;z-index:2}
+  .work .cap{padding:0 2px;display:flex;flex-direction:column;gap:10px}
+  .work .cap .ttl{font-family:'Cormorant Garamond';font-weight:400;font-size:24px;line-height:1.18;letter-spacing:-.4px;color:var(--ink)}
+  .work .cap .ttl em{font-style:italic;color:var(--terracotta)}
+  .work .cap .loc{font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--ink-55)}
+  .work .cap .loc em{font-family:'Cormorant Garamond';font-style:italic;color:var(--walnut);font-size:14px;text-transform:none;letter-spacing:.2px;margin-left:8px}
+
+  /* ============ TEXTURE & FINISH ============ */
+  .textures{padding:var(--sec-y) 0;background:var(--cream)}
+  .textures .head{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;margin-bottom:clamp(50px,7vh,90px)}
+  .textures h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,4.4vw,64px);line-height:1.04;letter-spacing:-1.4px;max-width:14ch}
+  .textures h3 em{font-style:italic;color:var(--terracotta)}
+  .textures .note{font-size:14px;line-height:1.6;color:var(--ink-70);max-width:320px;text-align:right}
+  .tex-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,2.4vw,32px)}
+  .tex{position:relative;overflow:hidden;border-radius:2px;aspect-ratio:3/4;background:var(--bone);cursor:crosshair}
+  .tex img{width:100%;height:100%;object-fit:cover;filter:saturate(.95) contrast(1.05);transition:transform 1.6s cubic-bezier(.7,0,.2,1)}
+  .tex:hover img{transform:scale(1.08)}
+  .tex .meta{
+    position:absolute;left:0;right:0;bottom:0;padding:18px 20px;
+    color:var(--cream);background:linear-gradient(180deg, transparent 0%, rgba(15,42,18,.78) 70%);
+    transform:translateY(28%);opacity:.78;transition:transform .55s cubic-bezier(.7,0,.2,1), opacity .35s;
+  }
+  .tex:hover .meta{transform:translateY(0);opacity:1}
+  .tex .meta .nm{font-family:'Cormorant Garamond';font-weight:400;font-size:20px;line-height:1.2}
+  .tex .meta .nm em{font-style:italic;color:var(--gold)}
+  .tex .meta .use{margin-top:6px;font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:rgba(250,246,236,.75)}
+
+  /* ============ PULL QUOTE ============ */
+  .quote{padding:var(--sec-y) 0;background:var(--bone)}
+  .quote blockquote{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
+    font-size:clamp(38px,5.4vw,86px);line-height:1.06;letter-spacing:-1.5px;color:var(--ink);max-width:18ch;
+  }
+  .quote blockquote span{color:var(--terracotta)}
+  .quote .cite{margin-top:60px;display:flex;align-items:center;gap:18px;font-size:12px;letter-spacing:2.6px;text-transform:uppercase;color:var(--ink-55)}
+  .quote .cite .bar{width:48px;height:1px;background:var(--terracotta)}
+  .quote .cite em{font-family:'Cormorant Garamond';font-style:italic;color:var(--ink);font-size:15px;letter-spacing:.2px;text-transform:none}
+
+  /* ============ SPACES GALLERY (magazine grid) ============ */
+  .gallery{padding:var(--sec-y) 0;background:var(--cream)}
+  .gallery .head{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-bottom:clamp(50px,7vh,90px)}
+  .gallery h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,4.4vw,64px);line-height:1.04;letter-spacing:-1.4px;max-width:14ch}
+  .gallery h3 em{font-style:italic;color:var(--terracotta)}
+  .gallery .more{font-size:13px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--ink);padding:10px 0;display:inline-flex;align-items:center;gap:10px;transition:color .3s, border-color .3s}
+  .gallery .more:hover{color:var(--terracotta);border-color:var(--terracotta)}
+  .gallery .more::after{content:"→";transition:transform .35s}
+  .gallery .more:hover::after{transform:translateX(4px)}
+  .mag{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(20px,2.4vw,32px)}
+  .mag .cell{position:relative;overflow:hidden;border-radius:2px;background:var(--bone);text-decoration:none;color:var(--ink);display:flex;flex-direction:column}
+  .mag .cell .ph{position:relative;overflow:hidden;flex:1}
+  .mag .cell .ph img{width:100%;height:100%;object-fit:cover;filter:saturate(.93) contrast(1.04) brightness(.93);transition:transform 1.8s cubic-bezier(.7,0,.2,1)}
+  .mag .cell:hover .ph img{transform:scale(1.04)}
+  .mag .cell .cap{padding:18px 4px 0;display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+  .mag .cell .cap .ttl{font-family:'Cormorant Garamond';font-weight:400;font-size:22px;line-height:1.2;letter-spacing:-.3px}
+  .mag .cell .cap .ttl em{font-style:italic;color:var(--terracotta)}
+  .mag .cell .cap .loc{font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--ink-55);white-space:nowrap}
+  .mag .a{grid-column:span 7;min-height:560px}
+  .mag .b{grid-column:span 5;min-height:560px}
+  .mag .c{grid-column:span 4;min-height:480px}
+  .mag .d{grid-column:span 4;min-height:480px}
+  .mag .e{grid-column:span 4;min-height:480px}
+
+  /* ============ DESIGN PHILOSOPHY (4 numbered) ============ */
+  .philos{padding:var(--sec-y) 0;background:var(--ink);color:var(--cream)}
+  .philos .container{position:relative}
+  .philos .head{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-bottom:clamp(60px,8vh,110px)}
+  .philos h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(38px,5vw,74px);line-height:1.04;letter-spacing:-1.6px;max-width:16ch}
+  .philos h3 em{font-style:italic;color:var(--gold)}
+  .philos .note{font-size:15px;line-height:1.6;color:var(--cream-55);max-width:300px;text-align:right;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px}
+  .ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(28px,3vw,48px)}
+  .ph{display:flex;flex-direction:column;gap:24px;border-top:1px solid var(--rule-light);padding-top:28px}
+  .ph .n{font-family:'Cormorant Garamond';font-style:italic;color:var(--gold);font-size:40px;line-height:.9;letter-spacing:-1px}
+  .ph h4{font-family:'Cormorant Garamond';font-weight:400;font-size:24px;line-height:1.18;letter-spacing:-.3px;color:var(--cream)}
+  .ph h4 em{font-style:italic;color:var(--gold)}
+  .ph p{font-size:15px;line-height:1.65;color:var(--cream-70)}
+
+  /* ============ BEFORE / AFTER ============ */
+  .ba{padding:var(--sec-y) 0;background:var(--cream)}
+  .ba .head{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-bottom:clamp(50px,7vh,90px)}
+  .ba h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(34px,4.4vw,64px);line-height:1.04;letter-spacing:-1.4px;max-width:16ch}
+  .ba h3 em{font-style:italic;color:var(--terracotta)}
+  .ba .note{font-size:14px;line-height:1.6;color:var(--ink-70);max-width:320px;text-align:right}
+  .ba-frame{position:relative;border-radius:2px;overflow:hidden;aspect-ratio:16/9;background:var(--bone);user-select:none;touch-action:none}
+  .ba-img{position:absolute;inset:0}
+  .ba-img img{width:100%;height:100%;object-fit:cover;filter:saturate(.92) contrast(1.04)}
+  .ba-before{z-index:1}
+  .ba-after{z-index:2;clip-path:inset(0 0 0 50%)}
+  .ba-divider{
+    position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--cream);z-index:3;
+    transform:translateX(-1px);box-shadow:0 0 0 1px rgba(31,36,25,.2), 0 0 30px rgba(31,36,25,.15);
+  }
+  .ba-handle{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:54px;height:54px;border-radius:50%;background:var(--cream);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 1px rgba(31,36,25,.18), 0 18px 40px rgba(31,36,25,.25);
+    cursor:ew-resize;z-index:4;color:var(--ink);font-size:18px;
+  }
+  .ba-handle::before{content:"⇆"}
+  .ba-label{position:absolute;z-index:3;top:20px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--cream);background:rgba(31,36,25,.55);backdrop-filter:blur(8px);padding:6px 12px;border-radius:999px}
+  .ba-label.before{left:20px}
+  .ba-label.after{right:20px}
+
+  /* ============ TESTIMONIAL ============ */
+  .test{padding:var(--sec-y) 0;background:var(--ivory)}
+  .test .container{display:grid;grid-template-columns:1fr 1.5fr;gap:clamp(40px,6vw,100px);align-items:center}
+  .test .portrait{position:relative;border-radius:2px;overflow:hidden;aspect-ratio:4/5;max-width:480px}
+  .test .portrait img{width:100%;height:100%;object-fit:cover;filter:saturate(.92) contrast(1.04) brightness(.94)}
+  .test .body{display:flex;flex-direction:column;gap:36px}
+  .test blockquote{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(28px,3.4vw,46px);line-height:1.15;letter-spacing:-.8px;color:var(--ink)}
+  .test blockquote em{font-style:italic;color:var(--terracotta)}
+  .test .who{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--rule);padding-top:20px;max-width:340px}
+  .test .who .nm{font-family:'Cormorant Garamond';font-style:italic;color:var(--walnut);font-size:18px}
+  .test .who .role{font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:var(--ink-55)}
+  .test .pager{display:flex;gap:8px;margin-top:8px}
+  .test .pager .dot{width:6px;height:6px;border-radius:50%;background:var(--ink-40)}
+  .test .pager .dot.on{background:var(--terracotta)}
+
+  /* ============ FOUNDER ============ */
+  .founder{padding:var(--sec-y) 0;background:var(--cream)}
+  .founder .container{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(40px,7vw,120px);align-items:center}
+  .founder h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(36px,4.6vw,68px);line-height:1.04;letter-spacing:-1.4px;max-width:16ch;margin-top:18px}
+  .founder h3 em{font-style:italic;color:var(--terracotta)}
+  .founder .body{display:flex;flex-direction:column;gap:22px;max-width:520px}
+  .founder .body p{font-size:17px;line-height:1.7;color:var(--ink-70)}
+  .founder .body p em{font-family:'Cormorant Garamond';font-style:italic;color:var(--walnut);font-size:1.06em}
+  .founder .body .sign{margin-top:8px;font-family:'Cormorant Garamond';font-style:italic;color:var(--walnut);font-size:24px}
+  .founder .body .role{font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:var(--ink-55);margin-top:-12px}
+  .founder .img{position:relative;border-radius:2px;overflow:hidden;aspect-ratio:4/5;background:var(--bone)}
+  .founder .img img{width:100%;height:100%;object-fit:cover;filter:saturate(.92) contrast(1.04) brightness(.94)}
+  .founder .img .badge{position:absolute;left:18px;top:18px;font-size:10.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--cream);background:rgba(31,36,25,.55);backdrop-filter:blur(8px);padding:6px 12px;border-radius:999px}
+
+  /* ============ CONSULTATION ============ */
+  .booking{position:relative;padding:var(--sec-y) 0;background:var(--ink);color:var(--cream);overflow:hidden}
+  .booking::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode:overlay;opacity:.5;
+  }
+  .booking .container{position:relative;z-index:2;display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(40px,6vw,90px);align-items:end}
+  .booking h2{font-family:'Cormorant Garamond';font-weight:400;font-size:clamp(44px,6.2vw,108px);line-height:1.02;letter-spacing:-2px}
+  .booking h2 em{font-style:italic;color:var(--gold)}
+  .booking .right-col{display:flex;flex-direction:column;gap:26px;max-width:420px;justify-self:end}
+  .booking .right-col p{font-size:16px;line-height:1.65;color:var(--cream-70);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px}
+  .booking .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .booking .cta-light{background:var(--cream);color:var(--ink)}
+  .booking .cta-light:hover{background:#fff}
+  .booking .ghost{color:var(--cream);border-color:rgba(250,246,236,.32)}
+  .booking .ghost:hover{color:var(--gold);border-color:var(--gold)}
+  .booking .details{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .booking .details .item{border-top:1px solid var(--rule-light);padding-top:14px}
+  .booking .details .item .lab{font-size:10.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--cream-55)}
+  .booking .details .item .val{margin-top:6px;font-size:14px;color:rgba(250,246,236,.86);line-height:1.45}
+  .booking .details .item .val em{font-family:'Cormorant Garamond';font-style:italic;color:var(--gold);font-size:16px}
+
+  /* ============ FOOTER ============ */
+  .foot{background:var(--ink);color:rgba(250,246,236,.6);border-top:1px solid var(--rule-light)}
+  .foot .container{padding-top:60px;padding-bottom:36px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:50px}
+  .foot .col h5{font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:var(--cream-55);margin-bottom:18px;font-weight:400}
+  .foot .col a{display:block;color:rgba(250,246,236,.78);text-decoration:none;font-size:14px;padding:4px 0;transition:color .25s}
+  .foot .col a:hover{color:var(--gold)}
+  .foot .col p{font-size:14px;line-height:1.6;color:rgba(250,246,236,.65);max-width:340px}
+  .foot .col .brand{font-family:'Cormorant Garamond';font-style:italic;color:var(--cream);font-size:32px;letter-spacing:-1px;margin-bottom:18px;font-weight:400}
+  .foot .bar{border-top:1px solid var(--rule-light);padding:22px var(--gut);font-size:12px;display:flex;justify-content:space-between;gap:30px}
+  .foot .bar a{color:rgba(250,246,236,.78);text-decoration:none}
+  .foot .bar a:hover{color:var(--gold)}
+
+  /* ============ CURSOR ============ */
+  .cursor{position:fixed;top:0;left:0;width:14px;height:14px;border-radius:50%;background:var(--terracotta);pointer-events:none;z-index:200;mix-blend-mode:difference;transform:translate(-50%,-50%);transition:width .35s, height .35s, opacity .25s;opacity:0}
+  .cursor.show{opacity:1}
+  .cursor.expand{width:64px;height:64px}
+  @media (hover:none){.cursor{display:none}}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:1100px){
+    .signature .row{grid-template-columns:1fr 1fr;gap:24px}
+    .signature .row .work.feature{grid-column:span 2}
+    .signature .row .work.feature .img{aspect-ratio:16/9;min-height:auto}
+    .tex-grid{grid-template-columns:repeat(3,1fr)}
+    .ph-grid{grid-template-columns:1fr 1fr;gap:36px}
+    .mag .a, .mag .b{grid-column:span 12;min-height:420px}
+    .mag .c, .mag .d, .mag .e{grid-column:span 6;min-height:360px}
+    .mag .e{grid-column:span 12}
+  }
+  @media (max-width:780px){
+    :root{--gut:22px;--sec-y:clamp(72px,12vh,110px)}
+    .nav .links{display:none}
+    .right .meta{display:none}
+    .nav{grid-template-columns:1fr auto}
+    .hero-inner{padding:120px var(--gut) 60px}
+    h1.hero-title{font-size:clamp(46px,12vw,80px);letter-spacing:-2px}
+    .hero-bottom{grid-template-columns:1fr;gap:30px}
+    .hero-meta{display:none}
+    .scroll-cue{display:none}
+    .statement .grid{grid-template-columns:1fr;gap:32px}
+    .signature .row{grid-template-columns:1fr;gap:28px}
+    .signature .row .work.feature{grid-column:span 1}
+    .tex-grid{grid-template-columns:1fr 1fr;gap:18px}
+    .signature .note,.textures .note,.gallery .head .more,.philos .note,.ba .note{text-align:left}
+    .ph-grid{grid-template-columns:1fr;gap:30px}
+    .mag .c, .mag .d, .mag .e{grid-column:span 12;min-height:300px}
+    .ba-frame{aspect-ratio:4/5}
+    .test .container,.founder .container,.booking .container{grid-template-columns:1fr;gap:36px}
+    .test .portrait,.founder .img{max-width:none;aspect-ratio:5/6}
+    .booking h2{font-size:46px}
+    .booking .right-col{justify-self:start}
+    .foot .container{grid-template-columns:1fr 1fr;gap:30px;padding-top:48px;padding-bottom:30px}
+    .foot .col:first-child{grid-column:span 2}
+    .foot .bar{flex-direction:column;gap:10px;padding:18px var(--gut)}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .right .meta .pulse,.scroll-cue .track::before{animation:none}
+    .work .img img,.tex img,.mag .cell .ph img{transition:none}
+    .cursor{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="../cinematic/" class="brand"><span class="dot"></span> oikos</a>
+  <div class="links">
+    <a href="#practice">Practice</a>
+    <a href="#textures">Textures</a>
+    <a href="#gallery">Spaces</a>
+    <a href="#philosophy">Philosophy</a>
+    <a href="#brief">Studio</a>
+  </div>
+  <div class="right">
+    <span class="meta"><span class="pulse"></span> Delhi · 28.61° N</span>
+    <a href="#brief" class="cta" data-cursor>Begin a brief <span class="arr"></span></a>
+  </div>
+</nav>
+
+<!-- HERO (matches finalized cinematic) -->
+<section class="hero" id="hero">
+  <div class="hero-media">
+    <video src="https://allenanant.github.io/oikos-cinematic/cinematic/hero.mp4?v=6"
+           poster="https://allenanant.github.io/oikos-cinematic/cinematic/hero-poster.jpg?v=6"
+           muted playsinline autoplay loop preload="auto"></video>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+
+  <div class="hero-inner">
+    <div class="hero-tag" id="heroTag"><span class="bar"></span> Studio <em>001</em> &nbsp;·&nbsp; Delhi, India</div>
+    <h1 class="hero-title" id="heroTitle">
+      <span class="row"><span>We restructure</span></span>
+      <span class="row"><span>offices that <em>forgot</em></span></span>
+      <span class="row"><span>how to <em>breathe</em>.</span></span>
+    </h1>
+    <div class="hero-bottom">
+      <div class="hero-lede" id="heroLede">
+        <p>A working studio for biophilic workplaces &mdash; <em>quieter rooms, denser air, slower light.</em> We turn floors meant for people back into places <em>made for them</em>.</p>
+        <div class="hero-cta-row">
+          <a href="#brief" class="cta dark" data-cursor>Begin a brief <span class="arr"></span></a>
+          <a href="#gallery" class="ghost" data-cursor>See the studio</a>
+        </div>
+      </div>
+      <div class="hero-meta" id="heroMeta">
+        <span class="lab"><span class="bar"></span> Currently in studio</span>
+        <span class="val">Three floors in <em>Cyber City</em>, one warehouse in <em>Sultanpur</em>.</span>
+      </div>
+      <div class="scroll-cue" id="heroCue"><span>Scroll</span><span class="track"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<section class="statement reveal">
+  <div class="container">
+    <div class="grid">
+      <h2>An office is not a <em>floor with chairs</em> on it. <span class="q">It is a climate people spend most of their lives inside.</span></h2>
+      <div class="body">
+        <p>We are a small studio. <em>A botanist, a daylight specialist, two interior architects, an acoustician we trust.</em> We work on no more than four restructures a quarter, and we stay long after handover to make sure the rooms keep their air.</p>
+        <p>The work begins with a <em>three-day climate study</em> &mdash; light angle, CO₂, surface humidity, ambient noise at three times of day. By the time we sketch a wall, we know what the building has been fighting.</p>
+        <span class="sig"><span class="bar"></span><em>The studio, Delhi</em></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNATURE PRACTICE -->
+<section class="signature reveal" id="practice">
+  <div class="container">
+    <div class="head">
+      <h3>Signature <em>practice</em>, this season.</h3>
+      <p class="note">Three rooms from the studio's current shelf. Each begun in 2024, finished in 2025 &mdash; tuned for stillness before they were tuned for use.</p>
+    </div>
+    <div class="row">
+      <a href="#" class="work feature" data-cursor>
+        <div class="img">
+          <span class="tag">Headquarters · 3 floors</span>
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2200&q=80" alt="Cyber City headquarters with daylight and timber" />
+        </div>
+        <div class="cap">
+          <span class="ttl">A three-floor headquarters we taught how to <em>hold light</em>.</span>
+          <span class="loc">Gurugram <em>Cyber City</em></span>
+        </div>
+      </a>
+      <a href="#" class="work" data-cursor>
+        <div class="img">
+          <span class="tag">Restoration · 1972 shed</span>
+          <img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1600&q=80" alt="Sultanpur warehouse restored interior" />
+        </div>
+        <div class="cap">
+          <span class="ttl">A 1972 warehouse restored as a <em>working studio</em>.</span>
+          <span class="loc">Delhi <em>Sultanpur</em></span>
+        </div>
+      </a>
+      <a href="#" class="work" data-cursor>
+        <div class="img">
+          <span class="tag">Studio · ground floor</span>
+          <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1600&q=80" alt="Indoor courtyard inside studio" />
+        </div>
+        <div class="cap">
+          <span class="ttl">An <em>indoor courtyard</em> built around a single tree.</span>
+          <span class="loc">Delhi <em>Saket</em></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- TEXTURE & FINISH SHOWCASE -->
+<section class="textures reveal" id="textures">
+  <div class="container">
+    <div class="head">
+      <h3>The <em>material</em> shelf, this season.</h3>
+      <p class="note">Lime, oak, jute, brass, terracotta, raw linen. Hover for the rooms each one is in.</p>
+    </div>
+    <div class="tex-grid">
+      <div class="tex" data-cursor>
+        <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80" alt="Lime plaster" />
+        <div class="meta"><div class="nm"><em>Lime plaster</em>, ivory</div><div class="use">Walls · ceilings · interior reveals</div></div>
+      </div>
+      <div class="tex" data-cursor>
+        <img src="https://images.unsplash.com/photo-1495577014958-25aa1d6857b8?auto=format&fit=crop&w=1200&q=80" alt="Indian oak slats" />
+        <div class="meta"><div class="nm"><em>Indian oak</em>, slatted</div><div class="use">Partitions · acoustic panels</div></div>
+      </div>
+      <div class="tex" data-cursor>
+        <img src="https://images.unsplash.com/photo-1604014237744-37e6d7eb22fb?auto=format&fit=crop&w=1200&q=80" alt="Jute weave" />
+        <div class="meta"><div class="nm"><em>Jute weave</em>, hand-loomed</div><div class="use">Floors · entry mats · sound floors</div></div>
+      </div>
+      <div class="tex" data-cursor>
+        <img src="https://images.unsplash.com/photo-1517488629431-6427e0ee1e5f?auto=format&fit=crop&w=1200&q=80" alt="Aged brass" />
+        <div class="meta"><div class="nm"><em>Aged brass</em>, unlacquered</div><div class="use">Hardware · handles · light fittings</div></div>
+      </div>
+      <div class="tex" data-cursor>
+        <img src="https://images.unsplash.com/photo-1493106819501-66d381c466f1?auto=format&fit=crop&w=1200&q=80" alt="Terracotta tile" />
+        <div class="meta"><div class="nm">Hand-pressed <em>terracotta</em></div><div class="use">Floors · planter walls · thresholds</div></div>
+      </div>
+      <div class="tex" data-cursor>
+        <img src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=1200&q=80" alt="Raw linen" />
+        <div class="meta"><div class="nm">Raw <em>linen</em>, natural</div><div class="use">Drapes · upholstery · blinds</div></div>
+      </div>
+      <div class="tex" data-cursor>
+        <img src="https://images.unsplash.com/photo-1604147495798-57beb5d6af73?auto=format&fit=crop&w=1200&q=80" alt="Cane panels" />
+        <div class="meta"><div class="nm">Hand-caned <em>panels</em></div><div class="use">Cabinet fronts · ceiling reveals</div></div>
+      </div>
+      <div class="tex" data-cursor>
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80" alt="Living planting wall" />
+        <div class="meta"><div class="nm">Living <em>planting wall</em></div><div class="use">Air work · humidity hold · acoustic mass</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PULL QUOTE -->
+<section class="quote reveal">
+  <div class="container">
+    <blockquote>An office should feel less like a <span>product</span> someone bought, and more like a <span>climate</span> someone slowly built.</blockquote>
+    <div class="cite"><span class="bar"></span><em>From the studio brief, 2024</em></div>
+  </div>
+</section>
+
+<!-- SPACES GALLERY (magazine grid) -->
+<section class="gallery reveal" id="gallery">
+  <div class="container">
+    <div class="head">
+      <h3>A working <em>archive</em>.</h3>
+      <a href="../spaces/" class="more" data-cursor>See all rooms</a>
+    </div>
+    <div class="mag">
+      <a href="#" class="cell a" data-cursor>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=80" alt="Meeting room with natural daylight" /></div>
+        <div class="cap"><span class="ttl">Six meeting rooms tuned for <em>quiet</em></span><span class="loc">Mumbai · BKC</span></div>
+      </a>
+      <a href="#" class="cell b" data-cursor>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=1600&q=80" alt="Soft furnished room with timber and wool" /></div>
+        <div class="cap"><span class="ttl">A boardroom in <em>cane, lime and brass</em></span><span class="loc">Delhi · Vasant Vihar</span></div>
+      </a>
+      <a href="#" class="cell c" data-cursor>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1494145904049-0dca59b4bbad?auto=format&fit=crop&w=1400&q=80" alt="Vertical garden inside stairwell" /></div>
+        <div class="cap"><span class="ttl">A <em>living stairwell</em></span><span class="loc">Gurugram · GCR</span></div>
+      </a>
+      <a href="#" class="cell d" data-cursor>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1582653291997-079a1c04e63d?auto=format&fit=crop&w=1400&q=80" alt="Founder office with plants and timber" /></div>
+        <div class="cap"><span class="ttl">A founder's office, <em>slower</em></span><span class="loc">Gurugram · DLF</span></div>
+      </a>
+      <a href="#" class="cell e" data-cursor>
+        <div class="ph"><img src="https://images.unsplash.com/photo-1532102522784-9e4d4d9758c5?auto=format&fit=crop&w=1400&q=80" alt="Indoor warm-lit reception with brass" /></div>
+        <div class="cap"><span class="ttl">A reception <em>quietened</em> with wool</span><span class="loc">Delhi · Connaught</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philos reveal" id="philosophy">
+  <div class="container">
+    <div class="head">
+      <h3>Four <em>principles</em> we work from.</h3>
+      <p class="note">Slow practice, fewer rooms, deeper attention &mdash; the only kind of scale we are interested in.</p>
+    </div>
+    <div class="ph-grid">
+      <div class="ph">
+        <span class="n">01</span>
+        <h4>Air, <em>then</em> floor plan.</h4>
+        <p>Every restructure begins with a three-day climate study &mdash; light, CO₂, humidity, ambient noise. The brief follows the reading, not the other way around.</p>
+      </div>
+      <div class="ph">
+        <span class="n">02</span>
+        <h4>Plants as <em>infrastructure</em>.</h4>
+        <p>Planting plans before furniture plans. Every room ships with a care calendar and six months of post-handover work, on us.</p>
+      </div>
+      <div class="ph">
+        <span class="n">03</span>
+        <h4>Quiet is a <em>material</em>.</h4>
+        <p>Lime ceilings, oak slats, planting walls, wool floors. Acoustics tuned by source-test, not by vibe. The cheapest way to feel expensive is to be quiet.</p>
+      </div>
+      <div class="ph">
+        <span class="n">04</span>
+        <h4>Four rooms <em>a quarter</em>.</h4>
+        <p>Slower work, fewer projects, deeper attention. The team stays small &mdash; one botanist, two interior architects, an acoustician we trust.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section class="ba reveal">
+  <div class="container">
+    <div class="head">
+      <h3>Before and <em>after</em>, the same floor.</h3>
+      <p class="note">A 220 m² floor in Gurugram, restructured in seven weeks. Drag the divider.</p>
+    </div>
+    <div class="ba-frame" id="baFrame">
+      <span class="ba-label before">Before</span>
+      <div class="ba-img ba-before">
+        <img src="https://images.unsplash.com/photo-1564540583246-934409427776?auto=format&fit=crop&w=2200&q=80" alt="Office before restructure — glass and harsh light" />
+      </div>
+      <div class="ba-img ba-after" id="baAfter">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2200&q=80" alt="Office after restructure — timber and daylight" />
+      </div>
+      <span class="ba-label after">After</span>
+      <div class="ba-divider" id="baDivider"></div>
+      <div class="ba-handle" id="baHandle" data-cursor></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="test reveal">
+  <div class="container">
+    <div class="portrait">
+      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1400&q=80" alt="Portrait of founder client in office interior" />
+    </div>
+    <div class="body">
+      <span class="lab"><span class="bar"></span> A word from the floor</span>
+      <blockquote>&ldquo;We stopped <em>apologising</em> for the air in our office. The plants are still alive eight months in &mdash; the team writes more, calls less. It feels like the building <em>finally agrees</em> with us.&rdquo;</blockquote>
+      <div class="who">
+        <span class="nm">N. Krishnamurthy</span>
+        <span class="role">Founder, a 40-person studio · Bengaluru</span>
+      </div>
+      <div class="pager"><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="founder reveal" id="founder">
+  <div class="container">
+    <div>
+      <span class="lab"><span class="bar"></span> The founder</span>
+      <h3>The studio is run, quietly, by <em>Angelina</em>.</h3>
+      <div class="body">
+        <p>Trained as an interior architect in Milan and Delhi, Angelina opened the studio in 2022 with a single brief from a friend &mdash; <em>restructure my office before I lose the team to the air</em>.</p>
+        <p>Twelve rooms later, the practice still works the same way: a small team, four projects a quarter, every room growing rather than drawn. She is in the studio four days a week and on a floor the other three.</p>
+        <span class="sign">Angelina ~</span>
+        <span class="role">Founder &amp; principal · Studio 001</span>
+      </div>
+    </div>
+    <div class="img">
+      <span class="badge">In studio · today</span>
+      <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=1400&q=80" alt="Portrait of the founder in studio with plants" />
+    </div>
+  </div>
+</section>
+
+<!-- CONSULTATION CTA -->
+<section class="booking reveal" id="brief">
+  <div class="container">
+    <div>
+      <span class="lab on-dark"><span class="bar"></span> A brief is the beginning</span>
+      <h2 style="margin-top:24px">Tell us about the <em>floor</em>,<br/>the <em>building</em>, the <em>climate</em><br/>your team works inside.</h2>
+      <div class="row" style="margin-top:50px">
+        <a href="mailto:studio@oikos.in" class="cta cta-light" data-cursor>Begin a brief <span class="arr"></span></a>
+        <a href="#gallery" class="ghost" data-cursor>See the spaces</a>
+      </div>
+    </div>
+    <div class="right-col">
+      <p>We take on four restructures a quarter. Briefs open every March, June, September and December &mdash; written, never templated.</p>
+      <div class="details">
+        <div class="item"><div class="lab on-dark">Studio</div><div class="val">Sultanpur, <em>Delhi</em></div></div>
+        <div class="item"><div class="lab on-dark">Working hours</div><div class="val">10:00 &mdash; <em>18:30 IST</em></div></div>
+        <div class="item"><div class="lab on-dark">Email</div><div class="val">studio@<em>oikos.in</em></div></div>
+        <div class="item"><div class="lab on-dark">Phone</div><div class="val">+91 11 4123 <em>0001</em></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="container">
+    <div class="col">
+      <div class="brand">oikos</div>
+      <p>A working studio for biophilic workplaces. We restructure offices into rooms that hold light, air and quiet. Studio 001, Delhi &mdash; 28.61° N.</p>
+    </div>
+    <div class="col">
+      <h5>Studio</h5>
+      <a href="../cinematic/">Home</a>
+      <a href="../practice/">Practice</a>
+      <a href="../spaces/">Spaces</a>
+      <a href="../journal/">Journal</a>
+    </div>
+    <div class="col">
+      <h5>Practice</h5>
+      <a href="#practice">Signature work</a>
+      <a href="#textures">Material shelf</a>
+      <a href="#philosophy">Philosophy</a>
+      <a href="#founder">Founder</a>
+    </div>
+    <div class="col">
+      <h5>Get in touch</h5>
+      <a href="mailto:studio@oikos.in">studio@oikos.in</a>
+      <a href="#brief">Begin a brief</a>
+      <a href="#">Instagram</a>
+      <a href="#">Are.na</a>
+    </div>
+  </div>
+  <div class="bar">
+    <span>&copy; Oikos Studio &nbsp;·&nbsp; Delhi, 28.61° N</span>
+    <span><a href="#">Privacy</a> &nbsp;·&nbsp; <a href="#">Imprint</a></span>
+  </div>
+</footer>
+
+<!-- ============ SCRIPTS ============ -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(() => {
+  // Lenis smooth scroll
+  const lenis = new Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothTouch:false });
+  function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+
+  gsap.registerPlugin(ScrollTrigger);
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+
+  // Nav scroll behavior — switch to light theme after hero
+  const nav = document.getElementById('nav');
+  const hero = document.getElementById('hero');
+  ScrollTrigger.create({
+    trigger: hero, start:'bottom 100px', end:'bottom top',
+    onEnter: () => nav.classList.add('light','scrolled'),
+    onLeaveBack: () => nav.classList.remove('light','scrolled'),
+  });
+  ScrollTrigger.create({
+    start:'top -40', end:99999,
+    onUpdate: self => { if (!nav.classList.contains('light')) nav.classList.toggle('scrolled', self.scroll() > 40); }
+  });
+
+  // Hero title entrance
+  const titleRows = document.querySelectorAll('.hero-title .row > span');
+  gsap.set(titleRows, { yPercent: 110 });
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  tl.to('#heroTag', { opacity: 1, y: 0, duration: .9, delay: .25 });
+  tl.to(titleRows, { yPercent: 0, duration: 1.15, stagger: 0.13 }, '-=0.55');
+  tl.to('#heroLede', { opacity: 1, duration: .9 }, '-=0.4');
+  tl.to('#heroMeta', { opacity: 1, duration: .9 }, '<+=0.1');
+  tl.to('#heroCue',  { opacity: 1, duration: .6 }, '<+=0.15');
+
+  // Hero parallax + fade out
+  gsap.to('.hero-media', { yPercent: 14, scale:1.04, ease:'none',
+    scrollTrigger: { trigger:'#hero', start:'top top', end:'bottom top', scrub:true } });
+  gsap.to('.hero-inner', { yPercent:-16, opacity:0, ease:'none',
+    scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom top', scrub:true } });
+
+  // Generic reveal: fade up direct children of any .reveal section's .container or first wrapper
+  document.querySelectorAll('section.reveal').forEach(sec => {
+    const targets = sec.querySelectorAll('h2, h3, h4, blockquote, p.note, .body > *, .work, .tex, .mag .cell, .ph, .portrait, .img, .ba-frame, .details .item, .row > *, .sig, .cite, .who, .pager, .more');
+    gsap.from(targets, {
+      opacity:0, y:30, duration:1, stagger:.06, ease:'expo.out',
+      scrollTrigger:{ trigger:sec, start:'top 78%' }
+    });
+  });
+
+  // Image ken-burns on first reveal
+  document.querySelectorAll('.work .img img, .mag .cell .ph img, .test .portrait img, .founder .img img').forEach(img => {
+    gsap.from(img, { scale:1.12, duration:1.8, ease:'expo.out',
+      scrollTrigger:{ trigger:img, start:'top 92%' } });
+  });
+
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  let cx = window.innerWidth/2, cy = window.innerHeight/2, tx=cx, ty=cy;
+  window.addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; cursor.classList.add('show'); });
+  (function tick(){ cx += (tx-cx)*.18; cy += (ty-cy)*.18; cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`; requestAnimationFrame(tick); })();
+  document.querySelectorAll('[data-cursor]').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+  });
+
+  // Before/after slider
+  (function ba(){
+    const frame = document.getElementById('baFrame');
+    const after = document.getElementById('baAfter');
+    const divider = document.getElementById('baDivider');
+    const handle = document.getElementById('baHandle');
+    if (!frame) return;
+    let dragging = false;
+    const setPos = (clientX) => {
+      const rect = frame.getBoundingClientRect();
+      let pct = ((clientX - rect.left) / rect.width) * 100;
+      pct = Math.max(2, Math.min(98, pct));
+      after.style.clipPath = `inset(0 0 0 ${pct}%)`;
+      divider.style.left = pct + '%';
+      handle.style.left = pct + '%';
+    };
+    const start = (e) => { dragging = true; const ev = e.touches ? e.touches[0] : e; setPos(ev.clientX); };
+    const move  = (e) => { if (!dragging) return; const ev = e.touches ? e.touches[0] : e; setPos(ev.clientX); };
+    const end   = () => { dragging = false; };
+    handle.addEventListener('mousedown', start);
+    frame.addEventListener('mousedown', start);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    handle.addEventListener('touchstart', start, {passive:true});
+    frame.addEventListener('touchstart', start, {passive:true});
+    window.addEventListener('touchmove', move, {passive:true});
+    window.addEventListener('touchend', end);
+  })();
+})();
+</script>
+</body>
+</html>
