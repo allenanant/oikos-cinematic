@@ -1,0 +1,197 @@
+/* ============================================================
+   Cinematic route — minimal, lots of breathing room.
+   Brand tokens come from globals.css.
+   ============================================================ */
+
+.cinematic-root {
+  background: var(--color-forest);
+  color: var(--color-cream);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.cinematic-root .display {
+  font-family: var(--font-display), Georgia, serif;
+}
+.cinematic-root body::before { display: none; }
+.cinematic-root ::selection { background: var(--color-terracotta); color: var(--color-cream); }
+
+/* ============ NAV — permanently transparent ============ */
+.cinematic-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 36px;
+  padding: 32px 64px;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  color: var(--color-cream);
+  background: transparent;
+}
+.cinematic-nav .brand {
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  font-size: 17px;
+  color: var(--color-cream);
+  text-decoration: none;
+}
+.cinematic-nav .links {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+}
+.cinematic-nav .links a {
+  color: var(--color-cream);
+  text-decoration: none;
+  opacity: 0.78;
+  padding: 6px 0;
+  position: relative;
+  transition: opacity 0.25s;
+}
+.cinematic-nav .links a:hover { opacity: 1; }
+.cinematic-nav .links a::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--color-terracotta);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.cinematic-nav .links a:hover::after { transform: scaleX(1); }
+.cinematic-nav .nav-cta {
+  justify-self: end;
+  color: var(--color-cream);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 248, 235, 0.5);
+  border-radius: 999px;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.cinematic-nav .nav-cta:hover {
+  background: var(--color-cream);
+  color: var(--color-forest);
+  border-color: var(--color-cream);
+}
+
+/* ============ HERO ============ */
+.cinematic-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-forest);
+}
+.cinematic-media { position: absolute; inset: 0; overflow: hidden; }
+.cinematic-media video,
+.cinematic-media canvas {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.95) contrast(1.04) brightness(0.92);
+  /* Slight overscan so any sub-pixel edge artifacts get cropped */
+  transform: scale(1.02);
+  transform-origin: center;
+}
+/* Very soft bottom-only vignette so the title sits cleanly on busy frames */
+.cinematic-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(11, 57, 16, 0.55) 100%);
+  pointer-events: none;
+}
+
+.cinematic-foreground {
+  position: relative;
+  z-index: 5;
+  height: 100%;
+  padding: 0 64px;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 9vh;
+}
+
+.cinematic-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(54px, 8.8vw, 156px);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  color: var(--color-cream);
+}
+
+/* Variant testing badge — top-right, small, dim. */
+.variant-badge {
+  position: absolute;
+  top: 28px;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 40;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 235, 0.55);
+  pointer-events: none;
+}
+.cinematic-title .row {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 6px;
+}
+.cinematic-title .row > span {
+  display: inline-block;
+  will-change: transform;
+}
+.cinematic-title em {
+  font-style: italic;
+  color: var(--color-terracotta);
+}
+
+/* ============ SPACER below hero — gives scroll room for the pin ============ */
+.cinematic-spacer {
+  display: block;
+  height: 100vh;
+  background: var(--color-cream);
+}
+
+/* ============ CURSOR ============ */
+.cinematic-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--color-terracotta);
+  pointer-events: none;
+  z-index: 100;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: width 0.35s cubic-bezier(0.7, 0, 0.2, 1),
+              height 0.35s cubic-bezier(0.7, 0, 0.2, 1),
+              opacity 0.25s;
+  opacity: 0;
+}
+.cinematic-cursor[data-show="true"] { opacity: 1; }
+.cinematic-cursor.is-expanded { width: 64px; height: 64px; }
+@media (hover: none) { .cinematic-cursor { display: none; } }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .cinematic-nav {
+    padding: 22px 22px;
+    grid-template-columns: 1fr auto;
+  }
+  .cinematic-nav .links { display: none; }
+  .cinematic-foreground { padding: 0 22px 12vh; }
+  .cinematic-title { font-size: clamp(48px, 13vw, 86px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-cursor { display: none; }
+}

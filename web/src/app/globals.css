@@ -1,0 +1,238 @@
+@import "tailwindcss";
+
+/* ── Oikos brand tokens (extracted from oikosbyangelina.com Wix theme) ── */
+@theme inline {
+  --color-cream: #fff8eb;
+  --color-cream-soft: #fbf1de;
+  --color-cream-deep: #f3e6c9;
+  --color-forest: #0b3910;
+  --color-forest-soft: #143a17;
+  --color-terracotta: #b46a2c;
+  --color-terracotta-soft: #c98a4f;
+  --color-sand: #eccdb2;
+  --color-honey: #da9b66;
+  --color-gold: #e4c58a;
+  --color-earth: #3c230f;
+  --color-sage: #939991;
+  --color-berry: #6e1919;
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-body: var(--font-body);
+}
+
+:root {
+  --color-bg: var(--color-cream);
+  --color-ink: var(--color-forest);
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Brand stays warm even in dark mode preference; we lock the warm cream theme */
+  :root {
+    --color-bg: var(--color-cream);
+    --color-ink: var(--color-forest);
+  }
+}
+
+html, body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Subtle paper-grain texture for warmth (very low opacity) ── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.235 0 0 0 0 0.137 0 0 0 0 0.059 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Section reveal: fade-up that triggers via IntersectionObserver ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Hairline rule used through the page ── */
+.hairline {
+  height: 1px;
+  background: currentColor;
+  opacity: 0.18;
+}
+
+/* ── Display headline kerning ── */
+.display {
+  font-family: var(--font-display), "EB Garamond", Georgia, serif;
+  font-feature-settings: "ss01", "salt", "lnum";
+  letter-spacing: -0.018em;
+}
+
+/* ── Tag / eyebrow style ── */
+.eyebrow {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── Marquee underline used on inline link CTAs ── */
+.cta-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 4px;
+}
+.cta-link::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform-origin: right center;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cta-link:hover::after {
+  transform-origin: left center;
+  transform: scaleX(1.05);
+}
+.cta-link svg {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cta-link:hover svg {
+  transform: translateX(4px);
+}
+
+/* ── Drop-cap optional ── */
+.dropcap::first-letter {
+  font-family: var(--font-display), serif;
+  font-style: italic;
+  font-size: 3.4em;
+  float: left;
+  line-height: 0.85;
+  margin: 0.1em 0.12em 0 0;
+  color: var(--color-terracotta);
+}
+
+/* ── Cycling verb: only the verb cycles, "you." sits static beside it.
+     The 4 verbs (sustains/nurtures/steadies/shelters) are all 8 chars, italic
+     Garamond, so widths are very close. Cell sizes to the widest, shorter
+     verbs are centered inside it so any small gap is split equally on both
+     sides — never a one-sided indent. ── */
+.cycle {
+  display: inline-grid;
+  grid-template: 1fr / 1fr;
+  vertical-align: baseline;
+  text-align: center;
+}
+.cycle > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(18%);
+  filter: blur(6px);
+  animation: cycle-word var(--cycle-total, 12s) infinite;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+/*
+ * Each word's animation lasts the full cycle, but its visible window is just its
+ * own slice (1/words.length). For 4 words on a 14s cycle = 25% per word.
+ * Word N is visible 0% → 25% of its individual cycle. We tightened entry/exit
+ * to 0%–4% (in) and 21%–25% (out) so words don't overlap with siblings.
+ */
+@keyframes cycle-word {
+  0%   { opacity: 0; transform: translateY(22%);  filter: blur(8px); }
+  4%   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+  21%  { opacity: 1; transform: translateY(0);    filter: blur(0); }
+  25%  { opacity: 0; transform: translateY(-22%); filter: blur(8px); }
+  100% { opacity: 0; transform: translateY(-22%); filter: blur(8px); }
+}
+
+/* ── Marquee infinite scroll for brand vocabulary strip ── */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: max-content;
+  white-space: nowrap;
+  animation: marquee-scroll var(--marquee-speed, 56s) linear infinite;
+}
+@keyframes marquee-scroll {
+  to { transform: translateX(-50%); }
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+/* ── Image reveal: zoom + blur out as it intersects ── */
+.img-reveal {
+  overflow: hidden;
+}
+.img-reveal img {
+  transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: scale(1.12);
+  filter: blur(10px) saturate(0.85);
+}
+.reveal.is-in .img-reveal img,
+.is-in.img-reveal img {
+  transform: scale(1);
+  filter: blur(0) saturate(1);
+}
+
+/* ── Etymology branch SVG: stroke-dash drawing on intersection ── */
+.branch-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  pathLength: 1;
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.65, 0, 0.35, 1);
+  transition-delay: var(--branch-delay, 0ms);
+}
+.reveal.is-in .branch-line,
+.is-in .branch-line {
+  stroke-dashoffset: 0;
+}
+.branch-word {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.9s ease-out, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--word-delay, 0ms);
+}
+.reveal.is-in .branch-word,
+.is-in .branch-word {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Reduce motion: disable kinetic animations, keep things readable ── */
+@media (prefers-reduced-motion: reduce) {
+  .cycle > span { animation: none; }
+  .cycle > span:first-child { opacity: 1; transform: none; filter: none; }
+  .marquee-track { animation: none; }
+  .img-reveal img { transition: none; transform: none; filter: none; }
+  .branch-line { transition: none; stroke-dashoffset: 0; }
+  .branch-word { transition: none; opacity: 1; transform: none; }
+}
