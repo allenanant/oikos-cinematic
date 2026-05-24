@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Oikos — Journal</title>
+<meta name="description" content="Field notes from a working studio for biophilic workplaces." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --paper:#F4EEDD;--cream:#FAF6EC;--bone:#F2EBD9;--ink:#0F2A12;--forest:#1A3A1F;
+    --terracotta:#B46A2C;--sand:#ECCDB2;--honey:#DA9B66;--gold:#E4C58A;
+    --earth:#3C230F;--sage:#7E8475;
+    --mute:rgba(15,42,18,.55);--rule:rgba(15,42,18,.16);--rule-light:rgba(250,246,236,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'Inter Tight',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{font-feature-settings:"ss01" 1,"ss02" 1}
+  .read{font-family:'Newsreader',serif;font-weight:300}
+  ::selection{background:var(--terracotta);color:var(--paper)}
+
+  /* paper grain */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0 0.04 0 0 0 .06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode:multiply;opacity:.6;
+  }
+
+  /* ============ NAV ============ */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:30;
+    display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:36px;
+    padding:22px 56px;font-size:13px;letter-spacing:.2px;color:var(--ink);
+    background:rgba(244,238,221,.85);backdrop-filter:blur(14px) saturate(1.1);
+    border-bottom:1px solid var(--rule);
+    transition:padding .4s;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:500;letter-spacing:-.3px;font-size:17px}
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--terracotta);box-shadow:0 0 0 3px rgba(180,106,44,.18)}
+  .links{display:flex;justify-content:center;gap:34px}
+  .links a{color:var(--ink);text-decoration:none;opacity:.65;position:relative;padding:6px 0;transition:opacity .25s}
+  .links a:hover{opacity:1}
+  .links a.active{opacity:1;color:var(--terracotta)}
+  .right{justify-self:end;display:flex;align-items:center;gap:18px}
+  .right .lat{color:var(--mute);font-size:12px;letter-spacing:.3px;display:flex;align-items:center;gap:8px}
+  .right .lat .pulse{width:6px;height:6px;border-radius:50%;background:var(--terracotta);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.2)}}
+  .cta{display:inline-flex;align-items:center;gap:10px;padding:11px 18px 11px 20px;background:var(--ink);color:var(--paper);border-radius:999px;text-decoration:none;font-size:13px;font-weight:500;letter-spacing:.1px;transition:transform .35s, background .25s}
+  .cta:hover{transform:translateY(-1px);background:var(--forest)}
+  .cta::after{content:"";width:14px;height:14px;border-right:1px solid var(--paper);border-top:1px solid var(--paper);transform:rotate(45deg);margin-left:2px;transition:transform .35s}
+  .cta:hover::after{transform:rotate(45deg) translate(2px,-2px)}
+
+  /* ============ MASTHEAD ============ */
+  .mast{
+    position:relative;z-index:2;
+    padding:150px 56px 36px;
+    display:grid;grid-template-columns:auto 1fr auto;gap:60px;align-items:end;
+    border-bottom:2px solid var(--ink);
+  }
+  .mast .label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:14px}
+  .mast .label .bar{width:32px;height:1px;background:var(--terracotta)}
+  .mast h1{
+    font-family:'Instrument Serif';font-style:italic;font-weight:400;
+    font-size:clamp(72px,12vw,196px);line-height:.86;letter-spacing:-5px;color:var(--ink);text-align:center;
+  }
+  .mast .issue{font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:var(--mute);text-align:right;display:flex;flex-direction:column;gap:6px}
+  .mast .issue .big{font-family:'Instrument Serif';font-style:italic;color:var(--terracotta);font-size:30px;letter-spacing:-1px}
+
+  .strap{
+    position:relative;z-index:2;
+    padding:14px 56px;display:flex;justify-content:space-between;align-items:center;
+    font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:var(--mute);
+    border-bottom:1px solid var(--rule);
+  }
+  .strap span em{font-family:'Instrument Serif';font-style:italic;color:var(--ink);font-size:13px;text-transform:none;letter-spacing:.2px}
+
+  /* ============ LEAD ARTICLE ============ */
+  .lead{
+    position:relative;z-index:2;
+    padding:80px 56px 100px;
+    display:grid;grid-template-columns:1.6fr 1fr;gap:80px;align-items:start;
+    border-bottom:1px solid var(--rule);
+  }
+  .lead .image{position:relative;aspect-ratio:5/4;overflow:hidden;border-radius:2px}
+  .lead .image img{width:100%;height:100%;object-fit:cover;filter:saturate(.92) contrast(1.04) brightness(.94)}
+  .lead .image .cap{position:absolute;left:18px;bottom:14px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(250,246,236,.92);background:rgba(15,42,18,.55);padding:6px 12px;border-radius:2px;backdrop-filter:blur(6px)}
+  .lead .body{display:flex;flex-direction:column;gap:24px}
+  .lead .kicker{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--terracotta);display:flex;align-items:center;gap:14px}
+  .lead .kicker .bar{width:24px;height:1px;background:var(--terracotta)}
+  .lead h2{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-size:clamp(38px,4.6vw,64px);line-height:1.04;letter-spacing:-1.5px;color:var(--ink)}
+  .lead .dek{font-family:'Newsreader',serif;font-weight:300;font-size:19px;line-height:1.65;color:rgba(15,42,18,.78);font-style:italic}
+  .lead .meta{display:flex;gap:24px;font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--mute);padding-top:18px;border-top:1px solid var(--rule)}
+  .lead .meta em{font-family:'Instrument Serif';font-style:italic;color:var(--ink);text-transform:none;letter-spacing:.2px;font-size:13px}
+  .lead .more{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;color:var(--ink);font-size:13px;letter-spacing:.1px;text-decoration:none;padding:11px 0;border-bottom:1px solid var(--ink);transition:color .3s, border-color .3s}
+  .lead .more:hover{color:var(--terracotta);border-color:var(--terracotta)}
+  .lead .more::after{content:"→";transition:transform .35s cubic-bezier(.7,0,.2,1)}
+  .lead .more:hover::after{transform:translateX(4px)}
+
+  /* ============ TWO-COLUMN FEATURE ============ */
+  .feature{
+    position:relative;z-index:2;
+    padding:90px 56px 110px;
+    display:grid;grid-template-columns:auto 1fr;gap:80px;
+    border-bottom:1px solid var(--rule);
+  }
+  .feature .side{display:flex;flex-direction:column;gap:14px;width:200px}
+  .feature .side .lab{font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:var(--mute)}
+  .feature .side .num{font-family:'Instrument Serif';font-style:italic;color:var(--terracotta);font-size:42px;letter-spacing:-1px;line-height:1}
+  .feature .side .date{font-size:13px;color:var(--ink)}
+  .feature .body{max-width:none}
+  .feature h3{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-size:clamp(32px,4vw,54px);line-height:1.06;letter-spacing:-1.2px;color:var(--ink);margin-bottom:28px}
+  .feature .cols{column-count:2;column-gap:46px;font-family:'Newsreader',serif;font-weight:300;font-size:17.5px;line-height:1.7;color:rgba(15,42,18,.86)}
+  .feature .cols p + p{margin-top:18px}
+  .feature .cols p:first-of-type::first-letter{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-size:74px;float:left;line-height:.85;padding-right:10px;padding-top:6px;color:var(--terracotta)}
+  .feature .cols em{font-style:italic;color:var(--terracotta)}
+  .feature .cite{margin-top:36px;font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:14px}
+  .feature .cite .bar{width:24px;height:1px;background:var(--terracotta)}
+
+  /* ============ PULL QUOTE STRIP ============ */
+  .pull{
+    position:relative;z-index:2;
+    padding:90px 56px;background:var(--ink);color:var(--paper);
+    border-bottom:1px solid var(--rule-light);
+  }
+  .pull blockquote{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-size:clamp(34px,4.4vw,60px);line-height:1.1;letter-spacing:-1px;color:var(--paper);max-width:1320px}
+  .pull blockquote span{color:var(--gold)}
+  .pull .cite{margin-top:36px;font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:rgba(250,246,236,.5);display:flex;align-items:center;gap:14px}
+  .pull .cite .bar{width:32px;height:1px;background:var(--terracotta)}
+  .pull .cite em{font-family:'Instrument Serif';font-style:italic;color:var(--gold);font-size:14px;letter-spacing:.2px;text-transform:none}
+
+  /* ============ INDEX BOARD ============ */
+  .board{
+    position:relative;z-index:2;
+    padding:100px 56px;background:var(--paper);border-bottom:1px solid var(--rule);
+  }
+  .board .head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:50px;flex-wrap:wrap}
+  .board h3{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-size:clamp(36px,4.6vw,62px);line-height:1.02;letter-spacing:-1.2px;color:var(--ink)}
+  .board .note{font-size:13px;color:var(--mute);max-width:300px;text-align:right;font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:16px}
+  .board .list{display:grid;grid-template-columns:1fr;border-top:1px solid var(--rule)}
+  .board .row{
+    display:grid;grid-template-columns:90px 1fr 1.4fr 220px 80px;gap:24px;align-items:baseline;
+    padding:24px 0;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);
+    transition:padding .35s cubic-bezier(.7,0,.2,1), background .35s;
+  }
+  .board .row:hover{padding-left:14px;background:linear-gradient(90deg, rgba(180,106,44,.06) 0%, transparent 70%)}
+  .board .row .iss{font-family:'Instrument Serif';font-style:italic;color:var(--terracotta);font-size:22px;letter-spacing:-1px}
+  .board .row .ttl{font-family:'Inter Tight';font-weight:300;font-size:22px;letter-spacing:-.5px;color:var(--ink)}
+  .board .row .ttl em{font-family:'Instrument Serif';font-style:italic;color:var(--terracotta);font-weight:400}
+  .board .row .dek{font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:15.5px;color:rgba(15,42,18,.7);line-height:1.5}
+  .board .row .meta{font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--mute)}
+  .board .row .arrow{justify-self:end;width:36px;height:36px;border-radius:50%;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:background .25s, border-color .25s, color .25s, transform .35s}
+  .board .row:hover .arrow{background:var(--terracotta);border-color:var(--terracotta);color:var(--paper);transform:rotate(-45deg)}
+
+  /* ============ SUBSCRIBE STRIP ============ */
+  .sub{
+    position:relative;z-index:2;
+    padding:140px 56px;background:var(--bone);
+    display:grid;grid-template-columns:1.4fr 1fr;gap:60px;align-items:end;border-bottom:1px solid var(--rule);
+  }
+  .sub .left{display:flex;flex-direction:column;gap:18px}
+  .sub .num{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:14px}
+  .sub .num .bar{width:32px;height:1px;background:var(--terracotta)}
+  .sub h2{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-size:clamp(40px,5.4vw,80px);line-height:1.02;letter-spacing:-1.5px;color:var(--ink)}
+  .sub h2 .quiet{color:rgba(15,42,18,.42)}
+  .sub p{font-family:'Newsreader',serif;font-weight:300;font-style:italic;font-size:18px;line-height:1.6;color:var(--mute);max-width:520px}
+  .sub form{display:flex;gap:8px;align-items:stretch;padding:8px;background:var(--paper);border:1px solid var(--rule);border-radius:999px}
+  .sub input{flex:1;border:0;background:transparent;padding:12px 20px;font:inherit;color:var(--ink);outline:none;font-size:14px}
+  .sub input::placeholder{color:var(--mute)}
+  .sub button{border:0;background:var(--ink);color:var(--paper);padding:12px 22px;border-radius:999px;font:inherit;font-weight:500;font-size:13px;cursor:pointer;transition:background .25s}
+  .sub button:hover{background:var(--forest)}
+  .sub .note{margin-top:14px;font-size:12px;color:var(--mute);font-style:italic;font-family:'Newsreader',serif}
+
+  /* ============ FOOTER ============ */
+  .foot{position:relative;z-index:2;padding:36px 56px;background:var(--ink);color:rgba(250,246,236,.6);font-size:12px;display:flex;justify-content:space-between;gap:30px;border-top:1px solid var(--rule-light)}
+  .foot a{color:rgba(250,246,236,.78);text-decoration:none}
+  .foot a:hover{color:var(--gold)}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:1000px){
+    .nav{padding:18px 22px;grid-template-columns:1fr auto}
+    .nav .links,.right .lat{display:none}
+    .mast{padding:120px 22px 30px;grid-template-columns:1fr;gap:24px;text-align:left}
+    .mast h1{text-align:left;font-size:18vw;letter-spacing:-2px}
+    .mast .issue{text-align:left}
+    .strap{padding:12px 22px;flex-direction:column;align-items:flex-start;gap:8px}
+    .lead{padding:50px 22px 70px;grid-template-columns:1fr;gap:40px}
+    .feature{padding:60px 22px 80px;grid-template-columns:1fr;gap:30px}
+    .feature .cols{column-count:1}
+    .pull{padding:60px 22px}
+    .board{padding:70px 22px}
+    .board .row{grid-template-columns:60px 1fr 60px;gap:14px;padding:18px 0}
+    .board .row .dek,.board .row .meta{display:none}
+    .board .row .ttl{font-size:18px}
+    .sub{padding:70px 22px;grid-template-columns:1fr;gap:30px}
+    .foot{padding:24px 22px;flex-direction:column;gap:12px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .right .lat .pulse{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="../cinematic/" class="brand"><span class="dot"></span> oikos</a>
+  <div class="links">
+    <a href="../cinematic/">Studio</a>
+    <a href="../practice/">Practice</a>
+    <a href="../spaces/">Spaces</a>
+    <a href="./" class="active">Journal</a>
+  </div>
+  <div class="right">
+    <span class="lat"><span class="pulse"></span> Delhi · 28.61° N</span>
+    <a href="#sub" class="cta">Begin a brief</a>
+  </div>
+</nav>
+
+<!-- MASTHEAD -->
+<header class="mast">
+  <div class="label"><span class="bar"></span> Oikos &middot; A reading room</div>
+  <h1>Journal</h1>
+  <div class="issue">
+    <span>Issue</span>
+    <span class="big">No. 04</span>
+    <span>Spring 2026</span>
+  </div>
+</header>
+
+<div class="strap">
+  <span>A working studio for biophilic workplaces &nbsp;·&nbsp; <em>Field notes, in slow type.</em></span>
+  <span>Delhi &middot; 28.61° N &middot; 77.20° E</span>
+</div>
+
+<!-- LEAD ARTICLE -->
+<section class="lead">
+  <div class="image">
+    <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=2200&q=80" alt="Meeting room with natural daylight" />
+    <span class="cap">Cyber City · Floor 09 · 11:42</span>
+  </div>
+  <div class="body">
+    <div class="kicker"><span class="bar"></span> 01 &middot; Lead essay</div>
+    <h2>On the cost of a <em>quiet</em> room.</h2>
+    <p class="dek">We have spent four years tuning meeting rooms for stillness instead of performance. Here is what we learnt about silence as a budget line.</p>
+    <div class="meta">
+      <span>By <em>Anant K.</em></span>
+      <span>1,840 words</span>
+      <span>14 min read</span>
+    </div>
+    <a href="#" class="more">Read the essay</a>
+  </div>
+</section>
+
+<!-- TWO-COLUMN FEATURE -->
+<section class="feature">
+  <aside class="side">
+    <span class="lab">No. 04 &middot; Feature</span>
+    <span class="num">02</span>
+    <span class="date">Field notes, March</span>
+  </aside>
+  <div class="body">
+    <h3>A warehouse that <em>refused</em> to dry out.</h3>
+    <div class="cols">
+      <p>We took on the Sultanpur warehouse in the wettest week of August. The shed had been sitting empty since 1998, and the air inside held the dense, slow humidity of an old library. The brief from the client was simple and almost rude. Do not turn this into another open-plan office. Do not put glass meeting rooms in it. Do not let it dry out.</p>
+      <p>For weeks the question of <em>how</em> a building stays damp without staying mouldy was the only thing on the studio whiteboard. Lime plaster. Old brick. Hand-pressed terracotta. Vertical planting walls fed from a slow drip we hid in the truss. None of it was decorative. All of it was working.</p>
+      <p>The acoustician we trust came in twice, once before and once after. The reverb dropped eleven decibels. The dry-air complaints, which the client's team had been logging in a private Slack channel since their last office, dropped to zero in the second month. We did not fix the room with software. We fixed it with <em>mass, weave and water</em>.</p>
+      <p>Two seasons in, the warehouse has held. The planting wall is on its third quiet pruning. The lime ceiling smells faintly of the rain. Nobody on the team has asked for a humidifier. The room, you might say, has remembered what it used to be.</p>
+    </div>
+    <div class="cite"><span class="bar"></span> Continued in print &middot; pp. 14&ndash;22</div>
+  </div>
+</section>
+
+<!-- PULL QUOTE STRIP -->
+<section class="pull">
+  <blockquote>The first <span>three days</span> of a project are spent measuring &mdash; not the room, the <span>climate inside the room</span>. Everything else follows from that reading.</blockquote>
+  <div class="cite"><span class="bar"></span><em>From the studio brief, 2024</em></div>
+</section>
+
+<!-- INDEX BOARD -->
+<section class="board">
+  <div class="head">
+    <h3>The reading <em>index</em>.</h3>
+    <div class="note">A slow archive. We publish once a season, not once a week.</div>
+  </div>
+  <div class="list">
+    <a href="#" class="row">
+      <span class="iss">No. 04</span>
+      <span class="ttl">On the cost of a <em>quiet</em> room</span>
+      <span class="dek">Four years of tuning meeting rooms for stillness instead of performance.</span>
+      <span class="meta">Lead essay &middot; 14 min</span>
+      <span class="arrow">→</span>
+    </a>
+    <a href="#" class="row">
+      <span class="iss">No. 04</span>
+      <span class="ttl">A warehouse that <em>refused</em> to dry out</span>
+      <span class="dek">Field notes from the Sultanpur restoration, in lime, brick and slow water.</span>
+      <span class="meta">Feature &middot; 9 min</span>
+      <span class="arrow">→</span>
+    </a>
+    <a href="#" class="row">
+      <span class="iss">No. 04</span>
+      <span class="ttl">Planting plans, <em>before</em> furniture plans</span>
+      <span class="dek">Why every room we hand over starts as a planting diagram, not a layout.</span>
+      <span class="meta">Practice &middot; 7 min</span>
+      <span class="arrow">→</span>
+    </a>
+    <a href="#" class="row">
+      <span class="iss">No. 03</span>
+      <span class="ttl">An <em>indoor courtyard</em> for a founding team</span>
+      <span class="dek">A small ground floor in Saket, built around a single mature ficus.</span>
+      <span class="meta">Project diary &middot; 11 min</span>
+      <span class="arrow">→</span>
+    </a>
+    <a href="#" class="row">
+      <span class="iss">No. 03</span>
+      <span class="ttl">The <em>care calendar</em> we hand over with every room</span>
+      <span class="dek">Six months of post-handover work, on us, before a project counts as finished.</span>
+      <span class="meta">Practice &middot; 6 min</span>
+      <span class="arrow">→</span>
+    </a>
+    <a href="#" class="row">
+      <span class="iss">No. 02</span>
+      <span class="ttl">A <em>boardroom</em> in cane, lime and aged brass</span>
+      <span class="dek">A small materials story from a client who wanted nothing polished in their room.</span>
+      <span class="meta">Materials &middot; 8 min</span>
+      <span class="arrow">→</span>
+    </a>
+    <a href="#" class="row">
+      <span class="iss">No. 02</span>
+      <span class="ttl">Why we will only take on <em>four</em> restructures a quarter</span>
+      <span class="dek">Notes on the slow practice, and the kind of scale we are uninterested in.</span>
+      <span class="meta">Letter &middot; 5 min</span>
+      <span class="arrow">→</span>
+    </a>
+    <a href="#" class="row">
+      <span class="iss">No. 01</span>
+      <span class="ttl">The first reading: <em>three days</em> with a CO₂ meter</span>
+      <span class="dek">How the studio's three-day climate study became a non-negotiable.</span>
+      <span class="meta">Method &middot; 10 min</span>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section class="sub" id="sub">
+  <div class="left">
+    <div class="num"><span class="bar"></span> 05 &nbsp;/&nbsp; A slow reading list</div>
+    <h2>Once a <em>season</em>, in your inbox.<br/><span class="quiet">Field notes, not a newsletter.</span></h2>
+    <p>Four issues a year. Long-form notes from the studio, project diaries, and the occasional reading list. Never sold, never shared.</p>
+  </div>
+  <div>
+    <form onsubmit="event.preventDefault(); this.querySelector('button').innerText='Sent.'">
+      <input type="email" placeholder="your.email@studio.in" required />
+      <button type="submit">Subscribe</button>
+    </form>
+    <div class="note">No more than four messages a year, signed by the studio.</div>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>&copy; Oikos Studio &nbsp;·&nbsp; Delhi, 28.61° N &nbsp;·&nbsp; Studio 001</span>
+  <span><a href="../cinematic/">Studio</a> &nbsp;·&nbsp; <a href="../practice/">Practice</a> &nbsp;·&nbsp; <a href="../spaces/">Spaces</a> &nbsp;·&nbsp; <a href="./">Journal</a></span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(() => {
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from('.mast h1', {opacity:0, y:36, duration:1.2, ease:'expo.out', delay:.05});
+  gsap.from('.mast .label, .mast .issue', {opacity:0, y:18, duration:.9, ease:'expo.out', delay:.2, stagger:.1});
+  gsap.from('.strap span', {opacity:0, y:10, duration:.7, delay:.35, stagger:.08});
+
+  gsap.from('.lead .image', {opacity:0, y:30, duration:1.1, scrollTrigger:{trigger:'.lead', start:'top 78%'}});
+  gsap.from('.lead .body > *', {opacity:0, y:22, duration:.9, stagger:.08, scrollTrigger:{trigger:'.lead', start:'top 78%'}});
+
+  gsap.from('.feature .side > *', {opacity:0, y:14, duration:.8, stagger:.08, scrollTrigger:{trigger:'.feature', start:'top 80%'}});
+  gsap.from('.feature h3', {opacity:0, y:24, duration:1, scrollTrigger:{trigger:'.feature', start:'top 78%'}});
+  gsap.from('.feature .cols p', {opacity:0, y:16, duration:.9, stagger:.06, scrollTrigger:{trigger:'.feature .cols', start:'top 82%'}});
+
+  gsap.from('.pull blockquote', {opacity:0, y:30, duration:1.1, scrollTrigger:{trigger:'.pull', start:'top 78%'}});
+  gsap.from('.pull .cite', {opacity:0, y:18, duration:.9, delay:.15, scrollTrigger:{trigger:'.pull', start:'top 78%'}});
+
+  gsap.from('.board h3, .board .note', {opacity:0, y:24, duration:1, stagger:.1, scrollTrigger:{trigger:'.board', start:'top 78%'}});
+  gsap.from('.board .row', {opacity:0, x:-16, duration:.7, stagger:.05, scrollTrigger:{trigger:'.board .list', start:'top 82%'}});
+
+  gsap.from('.sub h2, .sub p, .sub form, .sub .note', {opacity:0, y:22, duration:.9, stagger:.1, scrollTrigger:{trigger:'.sub', start:'top 80%'}});
+})();
+</script>
+</body>
+</html>
