@@ -343,6 +343,81 @@
   color: var(--ink-62);
 }
 
+/* ============ C-bis. CINEMA — pinned scroll-scrubbed video moment ============ */
+.full-cinema {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-forest);
+  color: var(--color-cream);
+}
+.full-cinema .cinema-media { position: absolute; inset: 0; overflow: hidden; }
+.full-cinema .cinema-media video {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  filter: saturate(0.92) contrast(1.04) brightness(0.78);
+  transform: scale(1.02);
+  transform-origin: center;
+}
+.full-cinema .cinema-overlay {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 60% at 50% 100%, rgba(11, 57, 16, 0.7), transparent 60%),
+    linear-gradient(180deg, rgba(11, 57, 16, 0.32) 0%, rgba(11, 57, 16, 0.08) 35%, rgba(11, 57, 16, 0.6) 100%);
+}
+.full-cinema .cinema-foreground {
+  position: relative; z-index: 3;
+  height: 100%;
+  padding: 0 clamp(28px, 5vw, 80px);
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-bottom: 12vh;
+  gap: 28px;
+}
+.full-cinema .cinema-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 248, 235, 0.72);
+  display: inline-flex; align-items: center; gap: 14px;
+}
+.full-cinema .cinema-bar {
+  display: inline-block;
+  width: 28px; height: 1px;
+  background: var(--color-terracotta);
+}
+.full-cinema .cinema-num {
+  color: var(--color-gold);
+  font-family: var(--font-editorial), Georgia, serif;
+  font-style: italic;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: 0.2px;
+}
+.full-cinema .cinema-caption {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(36px, 5.2vw, 84px);
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+  color: var(--color-cream);
+  max-width: 22ch;
+}
+.full-cinema .cinema-caption em {
+  font-style: italic;
+  color: var(--color-gold);
+}
+
+@media (max-width: 780px) {
+  .full-cinema .cinema-foreground { padding-bottom: 14vh; gap: 20px; }
+  .full-cinema .cinema-caption { font-size: clamp(28px, 9vw, 56px); }
+}
+
 /* ============ C. WHISPER ============ */
 .full-whisper { padding: clamp(50px, 7vh, 90px) 0; }
 .full-whisper .ed { align-items: start; }

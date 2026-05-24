@@ -3,6 +3,7 @@ import Cursor from "@/components/cinematic/Cursor";
 import FullNav from "@/components/full/FullNav";
 import Overture from "@/components/full/Overture";
 import Signature from "@/components/full/Signature";
+import Cinema from "@/components/full/Cinema";
 import Whisper from "@/components/full/Whisper";
 import Material from "@/components/full/Material";
 import Atelier from "@/components/full/Atelier";
@@ -27,6 +28,11 @@ export default function FullPage() {
       <main className="full-flow">
         <Overture />
         <Signature />
+        <Cinema
+          videoSrc={`${BASE}/cinematic/hero-v2.mp4`}
+          posterSrc={`${BASE}/cinematic/hero-v2-poster.jpg`}
+          reverse
+        />
         <Whisper />
         <Material />
         <Atelier />
