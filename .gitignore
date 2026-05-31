@@ -1,1 +1,7 @@
 .DS_Store
+
+# Syncthing conflict copies (e.g. "index 2.html", "hero 2.mp4") — never commit
+* [0-9].*
+
+# local scratch
+OIKOS_BUILD_BRIEF.md
