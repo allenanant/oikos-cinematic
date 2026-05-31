@@ -12,8 +12,5 @@
 :HL["/oikos-cinematic/_next/static/media/a218039a3287bcfd-s.p.17-1enzs_j91b.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/oikos-cinematic/_next/static/media/c875c6f5d3e977ac-s.p.0g_ng0t~d_b9n.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/oikos-cinematic/_next/static/media/e4505858a30c79c2-s.p.14m88r~v.m-cq.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["https://images.pexels.com/photos/35566906/pexels-photo-35566906/free-photo-of-modern-office-atrium-with-greenery.jpeg?auto=compress&cs=tinysrgb&w=1400&h=1750&fit=crop","image"]
-:HL["https://images.pexels.com/photos/13012256/pexels-photo-13012256.jpeg?auto=compress&cs=tinysrgb&w=1400&h=1750&fit=crop","image"]
-:HL["https://images.pexels.com/photos/30211145/pexels-photo-30211145/free-photo-of-close-up-of-wooden-slatted-surface-with-shadows.jpeg?auto=compress&cs=tinysrgb&w=1400&h=1750&fit=crop","image"]
 :HL["https://images.pexels.com/photos/32477165/pexels-photo-32477165/free-photo-of-modern-indoor-garden-with-tables-and-seating.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1500&fit=crop","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"full","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"AqblDQVKzDa2wXqAZtDu_"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"full","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"so3QcS2nUCQgXc67uzjN5"}

@@ -82,12 +82,16 @@ export default function Transform() {
             <img
               src="https://images.pexels.com/photos/37241151/pexels-photo-37241151/free-photo-of-empty-modern-office-space-with-fluorescent-lighting.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1029&fit=crop"
               alt="Empty office with fluorescent lighting before restructure"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div className="full-ba-img full-ba-after" ref={afterRef}>
             <img
               src="https://images.pexels.com/photos/36287488/pexels-photo-36287488/free-photo-of-modern-office-interior-in-milano-with-green-plants.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1029&fit=crop"
               alt="Restructured office with plants and warm daylight"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <span className="full-ba-label after">After</span>

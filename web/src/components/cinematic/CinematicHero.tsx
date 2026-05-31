@@ -49,6 +49,28 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
         video.pause();
         video.currentTime = 0;
 
+        // Decode-aware seeking: ScrollTrigger updates can fire faster than the
+        // video decoder can seek. Coalesce them — store the latest target and
+        // only issue a new seek from a single rAF loop once the previous seek
+        // has finished. Prevents the seek pile-up that makes the clip drift
+        // behind the scroll on a heavy page.
+        let targetTime = 0;
+        let seekRaf = 0;
+        let seeking = true;
+        const SEEK_EPS = 0.04; // ~1 frame at 24fps
+        const applySeek = () => {
+          if (!seeking) return;
+          if (!video.seeking && Math.abs(video.currentTime - targetTime) > SEEK_EPS) {
+            video.currentTime = targetTime;
+          }
+          seekRaf = requestAnimationFrame(applySeek);
+        };
+        seekRaf = requestAnimationFrame(applySeek);
+        cleanups.push(() => {
+          seeking = false;
+          cancelAnimationFrame(seekRaf);
+        });
+
         const st = ScrollTrigger.create({
           trigger: container,
           start: "top top",
@@ -56,10 +78,7 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
           pin: true,
           scrub: SCRUB,
           onUpdate: (self: { progress: number }) => {
-            const t = self.progress * video.duration;
-            if (Math.abs(video.currentTime - t) > 0.015) {
-              video.currentTime = t;
-            }
+            targetTime = self.progress * video.duration;
           },
         });
         cleanups.push(() => st.kill());

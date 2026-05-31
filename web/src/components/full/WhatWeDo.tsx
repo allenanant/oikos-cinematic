@@ -61,7 +61,7 @@ export default function WhatWeDo() {
             <article className="do-card" key={i} data-reveal>
               <div className="img">
                 <span className="idx">— {s.idx}</span>
-                <img src={s.img} alt={s.alt} />
+                <img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
               </div>
               <h4 className="ttl">{s.ttl}</h4>
               <p className="desc">{s.desc}</p>

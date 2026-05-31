@@ -43,6 +43,26 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
 
         if (reduceMotion) return;
 
+        // Decode-aware seeking — coalesce scroll updates into one in-flight
+        // seek at a time so the clip never drifts behind the scroll. See
+        // CinematicHero for the rationale.
+        let targetTime = video.currentTime;
+        let seekRaf = 0;
+        let seeking = true;
+        const SEEK_EPS = 0.04; // ~1 frame at 24fps
+        const applySeek = () => {
+          if (!seeking) return;
+          if (!video.seeking && Math.abs(video.currentTime - targetTime) > SEEK_EPS) {
+            video.currentTime = targetTime;
+          }
+          seekRaf = requestAnimationFrame(applySeek);
+        };
+        seekRaf = requestAnimationFrame(applySeek);
+        cleanups.push(() => {
+          seeking = false;
+          cancelAnimationFrame(seekRaf);
+        });
+
         const st = ScrollTrigger.create({
           trigger: container,
           start: "top top",
@@ -51,10 +71,7 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
           scrub: SCRUB,
           onUpdate: (self: { progress: number }) => {
             const progress = reverse ? 1 - self.progress : self.progress;
-            const t = progress * video.duration;
-            if (Math.abs(video.currentTime - t) > 0.015) {
-              video.currentTime = t;
-            }
+            targetTime = progress * video.duration;
           },
         });
         cleanups.push(() => st.kill());
