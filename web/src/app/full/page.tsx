@@ -19,7 +19,7 @@ export default function FullPage() {
       <Cursor />
       <FullNav active="home" />
       <CinematicHero
-        videoSrc={`${BASE}/cinematic/hero.mp4?v=6`}
+        videoSrc={`${BASE}/cinematic/hero.mp4?v=7intra`}
         posterSrc={`${BASE}/cinematic/hero-poster.jpg?v=6`}
         subtitle="Design a sustainable life that looks as beautiful as it is responsible."
       />
@@ -27,7 +27,7 @@ export default function FullPage() {
         <Overture />
         <WhatWeDo />
         <Cinema
-          videoSrc={`${BASE}/cinematic/hero-v2.mp4`}
+          videoSrc={`${BASE}/cinematic/hero-v2.mp4?v=7intra`}
           posterSrc={`${BASE}/cinematic/hero-v2-poster.jpg`}
           reverse
         />
