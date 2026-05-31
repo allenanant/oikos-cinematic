@@ -2,15 +2,12 @@ import CinematicHero from "@/components/cinematic/CinematicHero";
 import Cursor from "@/components/cinematic/Cursor";
 import FullNav from "@/components/full/FullNav";
 import Overture from "@/components/full/Overture";
-import Signature from "@/components/full/Signature";
+import WhatWeDo from "@/components/full/WhatWeDo";
 import Cinema from "@/components/full/Cinema";
-import Whisper from "@/components/full/Whisper";
-import Material from "@/components/full/Material";
-import Atelier from "@/components/full/Atelier";
-import Philosophy from "@/components/full/Philosophy";
+import WhyMatters from "@/components/full/WhyMatters";
 import Transform from "@/components/full/Transform";
-import Spread from "@/components/full/Spread";
-import Consult from "@/components/full/Consult";
+import WhyOikos from "@/components/full/WhyOikos";
+import ClosingInvite from "@/components/full/ClosingInvite";
 import FullFooter from "@/components/full/FullFooter";
 import Reveals from "@/components/full/Reveals";
 
@@ -20,26 +17,24 @@ export default function FullPage() {
   return (
     <>
       <Cursor />
-      <FullNav />
+      <FullNav active="home" />
       <CinematicHero
         videoSrc={`${BASE}/cinematic/hero.mp4?v=6`}
         posterSrc={`${BASE}/cinematic/hero-poster.jpg?v=6`}
+        subtitle="Design a sustainable life that looks as beautiful as it is responsible."
       />
       <main className="full-flow">
         <Overture />
-        <Signature />
+        <WhatWeDo />
         <Cinema
           videoSrc={`${BASE}/cinematic/hero-v2.mp4`}
           posterSrc={`${BASE}/cinematic/hero-v2-poster.jpg`}
           reverse
         />
-        <Whisper />
-        <Material />
-        <Atelier />
-        <Philosophy />
+        <WhyMatters />
         <Transform />
-        <Spread />
-        <Consult />
+        <WhyOikos />
+        <ClosingInvite />
       </main>
       <FullFooter />
       <Reveals />

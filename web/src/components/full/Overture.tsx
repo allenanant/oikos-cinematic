@@ -3,13 +3,15 @@ export default function Overture() {
     <section className="full-overture">
       <div className="ed">
         <span className="lab" data-reveal>
-          <span className="bar" /> Studio 001{" "}
-          <span className="num">— a working brief</span>
+          <span className="bar" /> Oikos{" "}
+          <span className="num">— our belief</span>
         </span>
         <h2 data-reveal>
-          An office is not a <em>floor with chairs</em> on it.{" "}
+          Sustainability isn&rsquo;t just about{" "}
+          <em>reducing harm</em>.{" "}
           <span className="q">
-            It is a climate people spend most of their lives inside.
+            It is about designing places that nurture both people and the
+            planet.
           </span>
         </h2>
         <div className="meta">
@@ -17,13 +19,10 @@ export default function Overture() {
             — The studio, Delhi
           </span>
           <p data-reveal>
-            We are a small team.{" "}
-            <em>
-              A botanist, a daylight specialist, two interior architects, an
-              acoustician we trust.
-            </em>{" "}
-            We work on no more than four restructures a quarter, and we stay
-            long after handover to make sure the rooms keep their air.
+            Most &ldquo;green&rdquo; offices stop at a{" "}
+            <em>planted wall</em>. Real sustainable design works at a deeper
+            level. With Oikos, you can design a workspace that is truly
+            sustainable — and better to work in.
           </p>
         </div>
       </div>

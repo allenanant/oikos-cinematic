@@ -2,14 +2,14 @@
 
 import { useEffect, useRef } from "react";
 
-type Props = { videoSrc: string; posterSrc?: string };
+type Props = { videoSrc: string; posterSrc?: string; subtitle?: string };
 
 // Original v2-feels-perfect config: raw <video>.currentTime, light scrub.
 // No scrolly-video, no transitionSpeed smoothing, no proxy tween.
 const SCRUB = 0.3;
 const PIN_END = "+=140%";
 
-export default function CinematicHero({ videoSrc, posterSrc }: Props) {
+export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) {
   const containerRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -130,6 +130,7 @@ export default function CinematicHero({ videoSrc, posterSrc }: Props) {
             </span>
           </span>
         </h1>
+        {subtitle && <p className="cinematic-sub">{subtitle}</p>}
       </div>
     </section>
   );
