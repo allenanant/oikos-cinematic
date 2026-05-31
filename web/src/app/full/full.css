@@ -1476,4 +1476,12 @@
   .about-triad .triad-row:nth-child(even) .img { order: 0; }
   .svc-list .svc-item { grid-template-columns: 1fr; gap: 14px; }
   .svc-how .svc-steps { grid-template-columns: 1fr 1fr; }
+
+  /* section-mark header: stack the heading and its right-side meta on mobile */
+  .full-mark { grid-template-columns: 1fr; gap: 12px; align-items: start; }
+  .full-mark .meta { justify-self: start; text-align: left; max-width: none; }
+
+  /* hero: lift the title + subtitle off the very bottom edge on short screens */
+  .cinematic-foreground { padding-bottom: 16vh; }
+  .cinematic-sub { font-size: 16px; }
 }
