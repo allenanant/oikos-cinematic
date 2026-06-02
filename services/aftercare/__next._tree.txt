@@ -1,7 +1,7 @@
 :HL["/oikos-cinematic/_next/static/chunks/04qg8p8quwuop.css","style"]
 :HL["/oikos-cinematic/_next/static/chunks/0tt.lu4r0k2~b.css","style"]
 :HL["/oikos-cinematic/_next/static/chunks/0kk7wae~9ull1.css","style"]
-:HL["/oikos-cinematic/_next/static/chunks/0in93v180a~uq.css","style"]
+:HL["/oikos-cinematic/_next/static/chunks/0iwynt4a7~zvu.css","style"]
 :HL["/oikos-cinematic/_next/static/media/01e4147cff8141ee-s.p.10ked.7w885.g.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/oikos-cinematic/_next/static/media/03bda585a99c6450-s.p.0zzh68k1~whtc.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/oikos-cinematic/_next/static/media/3c7c6164b2587822-s.p.0duriy8536ewt.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
@@ -14,4 +14,4 @@
 :HL["/oikos-cinematic/_next/static/media/e4505858a30c79c2-s.p.14m88r~v.m-cq.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["https://images.pexels.com/photos/36287488/pexels-photo-36287488/free-photo-of-modern-office-interior-in-milano-with-green-plants.jpeg?auto=compress&cs=tinysrgb&w=2000&h=1500&fit=crop","image"]
 :HL["https://images.pexels.com/photos/32477165/pexels-photo-32477165/free-photo-of-modern-indoor-garden-with-tables-and-seating.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1500&fit=crop","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"services","param":null,"prefetchHints":0,"slots":{"children":{"name":"aftercare","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"VLXw38VirMSSdc7LyQgYe"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"services","param":null,"prefetchHints":0,"slots":{"children":{"name":"aftercare","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"ZvFKG8pTl4eKZGr3PjXgJ"}
