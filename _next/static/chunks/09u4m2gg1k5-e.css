@@ -8,3 +8,34 @@
 /*oikos-meta-fullwidth*/.full-overture .meta p{max-width:none}
 /*oikos-meta-singlecol*/.full-overture .meta{grid-template-columns:1fr}
 /*oikos-center-pass*/.full-overture h2{grid-column:1/13;text-align:center}.full-overture .meta{grid-column:1/13}.full-overture .meta p{text-align:center}.full-why .why-stat{align-items:center;text-align:center}
+
+/*oikos-about*/.about-hero-inner{align-items:center;text-align:center}
+/*oikos-about*/.about-hero-inner h1{max-width:26ch;font-size:clamp(28px,4vw,58px);line-height:1.18}
+/*oikos-about*/.about-triad .full-mark{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+/*oikos-about*/.about-triad .full-mark .meta{text-align:center;justify-self:auto;max-width:none;margin:0}
+/*oikos-about*/.about-expertise .lab{grid-column:1/13;justify-content:center;text-align:center;width:100%}
+/*oikos-about*/.about-expertise .lab .num{font-size:clamp(22px,2.6vw,34px)}
+/*oikos-about*/@media (min-width:1101px){.about-etym .etym-word{grid-column:2 / 8}}
+/*oikos-services*/.svc-how .lab{display:flex;justify-content:center;text-align:center;width:100%}
+/*oikos-services*/.svc-how .lab .num{font-size:clamp(22px,2.6vw,34px)}
+/*oikos-services-hero*/@media (max-width:1100px){.svc-hero .svc-hero-text{grid-column:1/13}.svc-hero .svc-hero-text h1{max-width:none}.svc-hero .svc-hero-img{margin:0 auto}}
+/*oikos-services-hero*/@media (max-width:520px){.svc-hero{padding:clamp(110px,16vh,150px) 0 clamp(40px,6vh,64px)}.svc-hero .svc-hero-text h1{font-size:clamp(30px,7.8vw,40px);line-height:1.08}.svc-hero .svc-hero-img{max-width:none}}
+/*oikos-wr*/
+.svcd-hero .wr-eyebrow{display:block;width:100%;text-align:center;font-style:italic;font-family:var(--font-editorial),Georgia,serif;text-transform:none;letter-spacing:.3px;font-size:15px;color:var(--cream-78)}
+.svcd-ap-head{justify-content:center;text-align:center}
+.svcd-ap-head h2{white-space:nowrap}
+.svcd-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,2vw,34px)}
+.svcd-step{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--rule);padding:clamp(20px,3vh,30px) 0}
+.svcd-incl-head{align-items:center;text-align:center}
+.svcd-incl-head .wr-incl-ey{display:block;font-family:var(--font-editorial),Georgia,serif;font-style:italic;text-transform:none;letter-spacing:.2px;font-size:clamp(20px,2.2vw,28px);color:var(--color-terracotta);font-weight:400}
+@media(max-width:1024px){.svcd-steps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.svcd-steps{grid-template-columns:1fr}.svcd-ap-head h2{white-space:normal}}
+
+/*oikos-svc-edits*/
+.oik-hero-c{align-items:center;text-align:center}
+.oik-ap-c h2{max-width:none;white-space:normal}
+
+/*oikos-wr2*/
+.svcd-hero .wr-title{font-style:italic}
+
+/*oikos-services-h3*/.svc-how h3{grid-column:1/13;text-align:center}
