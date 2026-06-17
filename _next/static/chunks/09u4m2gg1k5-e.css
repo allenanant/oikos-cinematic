@@ -2,7 +2,7 @@
 
 /*oikos-fixups*/.full-overture .lab{grid-column:1/13;justify-content:center;text-align:center;width:100%;padding-top:0;margin-bottom:18px}.full-do .full-mark{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}.full-do .full-mark h3{text-align:center}.full-do .full-mark .meta{justify-self:auto;text-align:center;max-width:none;margin:0}
 /*oikos-hero-size*/.full-root .cinematic-title{font-size:clamp(40px,6.4vw,100px)}
-/*oikos-belief*/.full-overture .lab .num{font-family:var(--font-sans);font-style:normal;text-transform:uppercase;letter-spacing:3px;font-size:12px}/*oikos-note*/.full-why .why-head .note{font-size:22px}
+/*oikos-belief*/.full-overture .lab .num{font-family:var(--font-sans);font-style:normal;text-transform:uppercase;letter-spacing:3px;font-size:24px;font-weight:700}/*oikos-note*/.full-why .why-head .note{font-size:22px}
 /*oikos-h2*/.full-overture h2{font-size:clamp(40px,6vw,90px)}
 /*oikos-hero-center*/.full-root .cinematic-foreground{justify-content:center;padding-top:0;padding-bottom:0}
 /*oikos-meta-fullwidth*/.full-overture .meta p{max-width:none}
