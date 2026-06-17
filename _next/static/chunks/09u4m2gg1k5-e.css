@@ -65,3 +65,5 @@
 /*oikos-subheading:what-we-do*/#what-we-do .full-mark h3,#what-we-do .full-mark h3 em{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
 /*oikos-subheading:why-it-matters*/#why-it-matters .sec-title,#why-it-matters .sec-title em{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
 /*oikos-subheading:why-oikos*/#why-oikos .sec-title,#why-oikos .sec-title em{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
+/*oikos-about-accent*/.about-hero-inner h1 .about-hl{color:var(--color-gold)}
+/*oikos-about-3lines*/.about-hero .about-hero-inner h1{max-width:44ch}
