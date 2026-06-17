@@ -68,3 +68,4 @@
 /*oikos-about-accent*/.about-hero-inner h1 .about-hl{color:var(--color-gold)}
 /*oikos-about-3lines*/.about-hero .about-hero-inner h1{max-width:44ch}
 /*oikos-subheading:about-transformed*/.about-triad .full-mark h3,.about-triad .full-mark h3 em{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
+/*oikos-subheading:about-expertise*/.about-expertise .lab .num{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
