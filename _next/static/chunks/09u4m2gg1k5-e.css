@@ -61,5 +61,5 @@
 /*oikos-svcd-hero-fold*/
 @media(min-width:1025px){.svcd-hero{min-height:100vh}}
 
-/* OIKOS SUB-HEADING FONT TOKEN = font-family:var(--font-sans); font-weight:700; font-size:20px; font-style:normal (upright). Apply this whenever a text is set to "sub-heading font". */
-/*oikos-subheading:what-we-do*/#what-we-do .full-mark h3,#what-we-do .full-mark h3 em{font-family:var(--font-sans);font-weight:700;font-size:20px;font-style:normal}
+/* OIKOS SUB-HEADING FONT TOKEN = font-family:var(--font-sans); font-weight:700; font-size:24px; font-style:normal (upright). Apply this whenever a text is set to "sub-heading font". */
+/*oikos-subheading:what-we-do*/#what-we-do .full-mark h3,#what-we-do .full-mark h3 em{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal}
