@@ -70,3 +70,4 @@
 /*oikos-subheading:about-transformed*/.about-triad .full-mark h3,.about-triad .full-mark h3 em{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
 /*oikos-subheading:about-expertise*/.about-expertise .lab .num{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
 /*oikos-about-hero-center*/.about-hero{align-items:center}
+/*oikos-svc-quote*/.svc-hero .svc-hero-text h1{font-style:italic;max-width:22ch}
