@@ -111,3 +111,4 @@
 .contact-main .ed>.contact-form-col{width:100%!important;max-width:760px!important}
 .contact-main .ed>.contact-steps{width:100%!important;max-width:760px!important}
 /*oikos-contact-gap*/.contact-main .ed{row-gap:140px!important}
+/*oikos-subheading:contact-steps*/.contact-steps .lab{font-family:var(--font-sans)!important;font-weight:700!important;font-size:24px!important;font-style:normal!important;text-transform:uppercase!important}
