@@ -98,3 +98,9 @@
 /*oikos-contact-dek-line*/.contact-dek{display:none}
 .contact-hero-text h1{border-bottom:1px solid var(--rule);padding-bottom:clamp(16px,2.2vh,26px)}
 /*oikos-contact-hide-formintro*/.contact-form-intro{display:none}
+/*oikos-contact-layout*/.contact-main .ed{display:flex;flex-direction:column;align-items:center}
+.contact-form-col{grid-column:auto;width:100%;max-width:680px}
+.contact-steps{order:-1;width:100%;max-width:880px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px 28px}
+.contact-steps .lab{grid-column:1/-1}
+.contact-step{display:flex;flex-direction:column;gap:6px}
+@media(max-width:700px){.contact-steps{grid-template-columns:1fr}}
