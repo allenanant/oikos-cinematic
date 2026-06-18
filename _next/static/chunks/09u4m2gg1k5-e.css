@@ -85,3 +85,4 @@
 /*oikos-wr-hero*/.svcd-hero{align-items:center}
 .svcd-hero .svcd-dek{color:var(--color-gold)}
 .svcd-hero .svcd-for{display:none}
+/*oikos-subheading:wr-approach*/.svcd-approach .svcd-ap-head h2{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
