@@ -71,3 +71,13 @@
 /*oikos-subheading:about-expertise*/.about-expertise .lab .num{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
 /*oikos-about-hero-center*/.about-hero{align-items:center}
 /*oikos-svc-quote*/.svc-hero .svc-hero-text h1{font-style:italic;max-width:22ch}
+/*oikos-svc-4col*/
+.svc-list .svc-items{display:grid;grid-template-columns:repeat(4,1fr);grid-column:1/13;gap:clamp(18px,2.2vw,34px);align-items:start}
+.svc-list .svc-item{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--rule);padding:18px 0 0}
+.svc-list .svc-item:last-child{border-bottom:none}
+.svc-list .svc-body{gap:14px}
+.svc-list .svc-body .ttl{font-size:clamp(20px,1.8vw,26px);line-height:1.1}
+.svc-list .svc-body .p{font-size:15px;line-height:1.6;max-width:none}
+.svc-list .svc-item .n{font-size:clamp(26px,2.4vw,34px)}
+@media(max-width:880px){.svc-list .svc-items{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.svc-list .svc-items{grid-template-columns:1fr}}
