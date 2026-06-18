@@ -95,3 +95,5 @@
 /*oikos-contact-hide-eyebrow*/.contact-hero .lab{display:none}
 /*oikos-contact-hero-center*/.contact-hero-text{grid-column:1/13;align-items:center;text-align:center}
 .contact-hero-text h1{max-width:32ch}
+/*oikos-contact-dek-line*/.contact-dek{display:none}
+.contact-main .ed{border-top:1px solid var(--rule);padding-top:clamp(36px,5vh,56px)}
