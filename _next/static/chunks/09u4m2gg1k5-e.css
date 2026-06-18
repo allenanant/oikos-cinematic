@@ -89,3 +89,4 @@
 /*oikos-wr-stepimg*/.svcd-step-img{aspect-ratio:2/1}
 /*oikos-wr-hide-detail*/.svcd-detail{display:none}
 /*oikos-subheading:wr-incl-ey*/.svcd-incl-head .wr-incl-ey{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
+/*oikos-wr-hide-included*/.svcd-included{display:none}
