@@ -82,3 +82,6 @@
 @media(max-width:880px){.svc-list .svc-items{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:540px){.svc-list .svc-items{grid-template-columns:1fr}}
 /*oikos-subheading:svc-how*/.svc-how .lab .num{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
+/*oikos-wr-hero*/.svcd-hero{align-items:center}
+.svcd-hero .svcd-dek{color:var(--color-gold)}
+.svcd-hero .svcd-for{display:none}
