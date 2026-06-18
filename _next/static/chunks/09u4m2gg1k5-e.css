@@ -104,3 +104,6 @@
 .contact-steps .lab{grid-column:1/-1}
 .contact-step{display:flex;flex-direction:column;gap:6px}
 @media(max-width:700px){.contact-steps{grid-template-columns:1fr}}
+/*oikos-contact-reorder-force*/.contact-main .ed{display:flex!important;flex-direction:column!important;align-items:stretch!important}
+.contact-main .ed>.contact-steps{order:-1!important}
+.contact-main .ed>.contact-form-col{order:1!important}
