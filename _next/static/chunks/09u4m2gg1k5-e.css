@@ -97,3 +97,4 @@
 .contact-hero-text h1{max-width:32ch}
 /*oikos-contact-dek-line*/.contact-dek{display:none}
 .contact-hero-text h1{border-bottom:1px solid var(--rule);padding-bottom:clamp(16px,2.2vh,26px)}
+/*oikos-contact-hide-formintro*/.contact-form-intro{display:none}
