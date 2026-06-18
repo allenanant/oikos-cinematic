@@ -92,12 +92,3 @@
 /*oikos-wr-hide-included*/.svcd-included{display:none}
 /*oikos-subheading:faq*/.svcd-faq .lab{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
 /*oikos-contact-hide-studio*/.contact-studio,.contact-reassure{display:none}
-/*oikos-contact-redesign*/
-.contact-hero .lab{display:none}
-.contact-dek{display:none}
-.contact-hero-text{grid-column:1/13;align-items:center;text-align:center}
-.contact-form-col{grid-column:1/13;max-width:680px;margin:0 auto;display:flex;flex-direction:column}
-.contact-steps{order:-1;display:grid;grid-template-columns:repeat(3,1fr);gap:20px 22px;margin-bottom:10px}
-.contact-steps .lab{grid-column:1/-1}
-.contact-step{display:flex;flex-direction:column;gap:6px}
-@media(max-width:680px){.contact-steps{grid-template-columns:1fr}}
