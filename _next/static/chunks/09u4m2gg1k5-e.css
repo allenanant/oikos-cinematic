@@ -110,3 +110,4 @@
 /*oikos-contact-center*/.contact-main .ed{align-items:center!important}
 .contact-main .ed>.contact-form-col{width:100%!important;max-width:760px!important}
 .contact-main .ed>.contact-steps{width:100%!important;max-width:760px!important}
+/*oikos-contact-gap*/.contact-main .ed>.contact-steps{margin-bottom:clamp(48px,7vh,84px)!important}
