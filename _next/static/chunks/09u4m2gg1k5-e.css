@@ -87,3 +87,4 @@
 .svcd-hero .svcd-for{display:none}
 /*oikos-subheading:wr-approach*/.svcd-approach .svcd-ap-head h2{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
 /*oikos-wr-stepimg*/.svcd-step-img{aspect-ratio:2/1}
+/*oikos-wr-hide-detail*/.svcd-detail{display:none}
