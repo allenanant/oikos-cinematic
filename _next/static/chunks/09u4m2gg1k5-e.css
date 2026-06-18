@@ -93,3 +93,5 @@
 /*oikos-subheading:faq*/.svcd-faq .lab{font-family:var(--font-sans);font-weight:700;font-size:24px;font-style:normal;text-transform:uppercase}
 /*oikos-contact-hide-studio*/.contact-studio,.contact-reassure{display:none}
 /*oikos-contact-hide-eyebrow*/.contact-hero .lab{display:none}
+/*oikos-contact-hero-center*/.contact-hero-text{grid-column:1/13;align-items:center;text-align:center}
+.contact-hero-text h1{max-width:32ch}
