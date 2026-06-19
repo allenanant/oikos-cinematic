@@ -123,3 +123,10 @@
 .svc-hero .svc-hero-img:after{content:"";position:absolute;inset:0;background:linear-gradient(#0b391061 0%,#0b3910c7 100%)}
 .svc-hero .svc-hero-text{position:relative;z-index:2;grid-column:1/13;max-width:var(--container);margin:0 auto;padding:0 var(--gut);text-align:center;align-items:center}
 .svc-hero .svc-hero-text h1{color:var(--color-cream);max-width:24ch;margin:0 auto;font-size:clamp(30px,4.4vw,62px);line-height:1.16}
+/*oikos-hero-home-style*/
+.svc-hero{align-items:center!important}
+.about-hero{align-items:center!important}
+.svc-hero .svc-hero-text{align-items:center;text-align:center}
+.svc-hero .svc-hero-text h1{font-family:var(--font-display),Georgia,serif!important;font-weight:300!important;font-style:normal!important;color:var(--color-cream)!important;letter-spacing:-.022em;line-height:1.1;font-size:clamp(32px,4.6vw,72px);max-width:22ch;margin:0 auto}
+.about-hero .about-hero-inner h1{font-family:var(--font-display),Georgia,serif!important;font-weight:300!important;font-style:normal!important;color:var(--color-cream)!important;letter-spacing:-.02em;line-height:1.16;font-size:clamp(28px,4vw,58px);max-width:26ch;margin:0 auto}
+.svc-hero .svc-hero-text h1 em,.about-hero .about-hero-inner h1 em,.about-hero-inner h1 .about-hl{color:var(--color-terracotta)!important;font-style:italic!important}
