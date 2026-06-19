@@ -114,3 +114,4 @@
 /*oikos-contact-gap*/.contact-main .ed{row-gap:140px!important}
 /*oikos-subheading:contact-steps*/.contact-steps .lab{font-family:'Playfair Display',Georgia,serif!important;font-weight:700!important;font-size:24px!important;font-style:normal!important;text-transform:uppercase!important}
 /*oikos-accent-words*/#what-we-do .full-mark h3 em,#why-it-matters .sec-title em,#why-oikos .sec-title em,.about-triad .full-mark h3 em,.ok-accent{color:var(--color-terracotta)!important}
+/*oikos-accent-dark*/.full-overture .lab .num,.about-expertise .lab .num,.svc-how .lab .num,.svcd-incl-head .wr-incl-ey,.svcd-faq .lab,.contact-steps .lab{color:var(--ink)!important}
