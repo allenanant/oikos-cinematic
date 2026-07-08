@@ -28,7 +28,7 @@ export default function FullFooter() {
         </div>
         <div className="col">
           <h5>Get in touch</h5>
-          <a href="mailto:studio@oikos.in">studio@oikos.in</a>
+          <a href="mailto:contact@oikosbyangelina.com">contact@oikosbyangelina.com</a>
           <a href="#brief">Begin a brief</a>
           <a href="#">Instagram</a>
         </div>

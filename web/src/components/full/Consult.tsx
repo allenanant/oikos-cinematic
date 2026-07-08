@@ -76,7 +76,7 @@ export default function Consult() {
             </div>
             <div className="actions">
               <a
-                href="mailto:studio@oikos.in"
+                href="mailto:contact@oikosbyangelina.com"
                 className="cta"
                 data-cursor
               >

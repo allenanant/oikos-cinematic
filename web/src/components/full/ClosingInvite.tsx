@@ -21,7 +21,7 @@ export default function ClosingInvite({
   ),
   dek = "Every project begins with a conversation.",
   ctaLabel = "Begin with your space",
-  ctaHref = "mailto:studio@oikos.in",
+  ctaHref = "mailto:contact@oikosbyangelina.com",
   note = "Take your first step towards a sustainable future.",
   img = DEFAULT_IMG,
   alt = "A finished, light-filled room seen from the doorway",
