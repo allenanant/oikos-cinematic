@@ -66,30 +66,25 @@ export default function Transform() {
       <div className="ed">
         <div className="stamp-row" data-reveal>
           <div className="left">
-            <span className="n">v.</span>
             <h3>
-              Before and <em>after</em>, the same floor.
+              When <em>nature</em> moves in.
             </h3>
           </div>
-          <p className="note">
-            A 220 m² floor in Gurugram, restructured in seven weeks. Drag the
-            divider.
-          </p>
         </div>
         <div className="full-ba-frame" ref={frameRef} data-reveal>
           <span className="full-ba-label before">Before</span>
           <div className="full-ba-img full-ba-before">
             <img
-              src="https://images.pexels.com/photos/37241151/pexels-photo-37241151/free-photo-of-empty-modern-office-space-with-fluorescent-lighting.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1029&fit=crop"
-              alt="Empty office with fluorescent lighting before restructure"
+              src="https://images.pexels.com/photos/5483233/pexels-photo-5483233.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1029&fit=crop"
+              alt="A bare, cool open-plan office before restructure"
               loading="lazy"
               decoding="async"
             />
           </div>
           <div className="full-ba-img full-ba-after" ref={afterRef}>
             <img
-              src="https://images.pexels.com/photos/36287488/pexels-photo-36287488/free-photo-of-modern-office-interior-in-milano-with-green-plants.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1029&fit=crop"
-              alt="Restructured office with plants and warm daylight"
+              src="https://images.pexels.com/photos/37472187/pexels-photo-37472187.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1029&fit=crop"
+              alt="The same floor restructured, warm with plants, wood and daylight"
               loading="lazy"
               decoding="async"
             />

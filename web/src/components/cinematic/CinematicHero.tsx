@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 type Props = { videoSrc: string; posterSrc?: string; subtitle?: string };
 
 // Original v2-feels-perfect config: raw <video>.currentTime, light scrub.
-// No scrolly-video, no transitionSpeed smoothing, no proxy tween.
 const SCRUB = 0.3;
 const PIN_END = "+=140%";
 
@@ -44,71 +43,70 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
       tl.to(titleSpans, { yPercent: 0, duration: 1.2, stagger: 0.13, delay: 0.25 });
 
-      const bindScrub = () => {
-        if (!isFinite(video.duration) || !video.duration) return;
+      // Create the pin on MOUNT — not inside a video-load callback. Inserting
+      // the pin-spacer late (after loadedmetadata) shifts the layout and makes
+      // the next section pop in mid-scroll. The seek itself is duration-guarded
+      // below, so it is safe to pin before the video reports its duration.
+      let targetTime = 0;
+      const st = ScrollTrigger.create({
+        trigger: container,
+        start: "top top",
+        end: PIN_END,
+        pin: true,
+        scrub: SCRUB,
+        onUpdate: (self: { progress: number }) => {
+          if (isFinite(video.duration) && video.duration) {
+            targetTime = self.progress * video.duration;
+          }
+        },
+      });
+      cleanups.push(() => st.kill());
+
+      const fadeTween = gsap.to(
+        container.querySelector(".cinematic-foreground"),
+        {
+          yPercent: -14,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: container,
+            start: "top top",
+            end: "+=120%",
+            scrub: true,
+          },
+        }
+      );
+      cleanups.push(() => fadeTween.scrollTrigger?.kill());
+
+      // Decode-aware seeking: coalesce ScrollTrigger updates into one in-flight
+      // seek so the clip never drifts behind the scroll on a heavy page.
+      let seekRaf = 0;
+      let seeking = true;
+      const SEEK_EPS = 0.04; // ~1 frame at 24fps
+      const applySeek = () => {
+        if (!seeking) return;
+        if (
+          isFinite(video.duration) &&
+          !video.seeking &&
+          Math.abs(video.currentTime - targetTime) > SEEK_EPS
+        ) {
+          video.currentTime = targetTime;
+        }
+        seekRaf = requestAnimationFrame(applySeek);
+      };
+      const initVideo = () => {
         video.pause();
         video.currentTime = 0;
-
-        // Decode-aware seeking: ScrollTrigger updates can fire faster than the
-        // video decoder can seek. Coalesce them — store the latest target and
-        // only issue a new seek from a single rAF loop once the previous seek
-        // has finished. Prevents the seek pile-up that makes the clip drift
-        // behind the scroll on a heavy page.
-        let targetTime = 0;
-        let seekRaf = 0;
-        let seeking = true;
-        const SEEK_EPS = 0.04; // ~1 frame at 24fps
-        const applySeek = () => {
-          if (!seeking) return;
-          if (!video.seeking && Math.abs(video.currentTime - targetTime) > SEEK_EPS) {
-            video.currentTime = targetTime;
-          }
-          seekRaf = requestAnimationFrame(applySeek);
-        };
-        seekRaf = requestAnimationFrame(applySeek);
-        cleanups.push(() => {
-          seeking = false;
-          cancelAnimationFrame(seekRaf);
-        });
-
-        const st = ScrollTrigger.create({
-          trigger: container,
-          start: "top top",
-          end: PIN_END,
-          pin: true,
-          scrub: SCRUB,
-          onUpdate: (self: { progress: number }) => {
-            targetTime = self.progress * video.duration;
-          },
-        });
-        cleanups.push(() => st.kill());
-
-        const fadeTween = gsap.to(
-          container.querySelector(".cinematic-foreground"),
-          {
-            yPercent: -14,
-            opacity: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: container,
-              start: "top top",
-              end: "+=120%",
-              scrub: true,
-            },
-          }
-        );
-        cleanups.push(() => fadeTween.scrollTrigger?.kill());
-        ScrollTrigger.refresh();
       };
+      if (video.readyState >= 1) initVideo();
+      else video.addEventListener("loadedmetadata", initVideo, { once: true });
+      seekRaf = requestAnimationFrame(applySeek);
+      cleanups.push(() => {
+        seeking = false;
+        cancelAnimationFrame(seekRaf);
+      });
 
-      if (video.readyState >= 1) {
-        bindScrub();
-      } else {
-        video.addEventListener("loadedmetadata", bindScrub, { once: true });
-        cleanups.push(() =>
-          video.removeEventListener("loadedmetadata", bindScrub)
-        );
-      }
+      ScrollTrigger.refresh();
     })();
 
     return () => {
@@ -136,16 +134,16 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
       <div className="cinematic-foreground">
         <h1 className="cinematic-title display">
           <span className="row">
-            <span>We restructure</span>
+            <span>Design a sustainable life</span>
           </span>
           <span className="row">
             <span>
-              offices that <em>forgot</em>
+              that looks as <em>beautiful</em>
             </span>
           </span>
           <span className="row">
             <span>
-              how to <em>breathe</em>.
+              as it is <em>responsible</em>
             </span>
           </span>
         </h1>

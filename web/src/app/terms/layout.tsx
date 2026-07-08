@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Fraunces, Inter } from "next/font/google";
-import LenisProvider from "@/components/cinematic/LenisProvider";
 import "../cinematic/cinematic.css";
-import "./full.css";
+import "../full/full.css";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -28,19 +27,18 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Oikos · A studio for biophilic workplaces.",
-  description:
-    "A working studio for biophilic workplaces. Quieter rooms, denser air, slower light.",
+  title: "Terms and Conditions · Oikos by Angelina",
+  description: "The terms that govern use of the Oikos by Angelina website.",
 };
 
-export default function FullLayout({
+export default function TermsLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div
       className={`full-root cinematic-root ${fraunces.variable} ${inter.variable} ${cormorant.variable}`}
     >
-      <LenisProvider>{children}</LenisProvider>
+      {children}
     </div>
   );
 }

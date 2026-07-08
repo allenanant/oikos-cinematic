@@ -21,7 +21,7 @@ const ITEMS: Item[] = [
     lab: "Email",
     val: (
       <>
-        studio@<em>oikos.in</em>
+        contact@<em>oikosbyangelina.com</em>
       </>
     ),
   },

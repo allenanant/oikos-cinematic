@@ -28,9 +28,9 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Oikos — Services.",
+  title: "Oikos · Services.",
   description:
-    "We restructure the workplace as a climate: light, air, quiet, material. Workplace restructure, a reading of the room, material direction, and aftercare.",
+    "Sustainable office design as a climate — light, air, quiet and material. Our services: sustainable workplace design, biophilic design consultation, sustainable material sourcing, and plant care and maintenance.",
 };
 
 export default function ServicesLayout({

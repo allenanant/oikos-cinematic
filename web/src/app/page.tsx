@@ -1,23 +1,34 @@
-import { Nav } from "@/components/Nav";
-import { Hero } from "@/components/Hero";
-import { Letter } from "@/components/Letter";
-import { Etymology } from "@/components/Etymology";
-import { Services } from "@/components/Services";
-import { Closing } from "@/components/Closing";
-import { Footer } from "@/components/Footer";
+"use client";
 
+import { useEffect } from "react";
+
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+// The live Oikos site lives at /full/. The bare root previously rendered an
+// old "magazine" draft; anyone landing here is forwarded to the real homepage.
 export default function Home() {
+  useEffect(() => {
+    window.location.replace(`${BASE}/full/`);
+  }, []);
+
   return (
-    <>
-      <Nav />
-      <main className="relative">
-        <Hero />
-        <Letter />
-        <Etymology />
-        <Services />
-        <Closing />
-      </main>
-      <Footer />
-    </>
+    <main
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#0f2f11",
+        color: "#f5efe0",
+        fontFamily: "var(--font-display), Georgia, serif",
+        fontStyle: "italic",
+        fontSize: "30px",
+        letterSpacing: "0.4px",
+      }}
+    >
+      <a href={`${BASE}/full/`} style={{ color: "#f5efe0", textDecoration: "none" }}>
+        oikos
+      </a>
+    </main>
   );
 }

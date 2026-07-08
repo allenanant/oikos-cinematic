@@ -4,8 +4,11 @@ import ClosingInvite from "@/components/full/ClosingInvite";
 import FullFooter from "@/components/full/FullFooter";
 import Reveals from "@/components/full/Reveals";
 
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 type Svc = {
   n: string;
+  slug: string;
   ttl: React.ReactNode;
   body: React.ReactNode;
   forWhom: string;
@@ -14,17 +17,16 @@ type Svc = {
 const SERVICES: Svc[] = [
   {
     n: "01",
+    slug: "workplace-restructure",
     ttl: (
       <>
-        Workplace <em>restructure</em>.
+        Sustainable workplace <em>design</em>.
       </>
     ),
     body: (
       <>
-        We restructure offices from the climate up. Light is re-planned. Air and
-        planting are designed as a single system. Acoustics are tuned by
-        measurement. Materials are chosen for how they age, not how they
-        photograph. Concept through completion.
+        A full office redesign from the climate up. Light, air, planting,
+        acoustics and materials worked as one system. Concept to completion.
       </>
     ),
     forWhom:
@@ -32,18 +34,17 @@ const SERVICES: Svc[] = [
   },
   {
     n: "02",
+    slug: "reading-of-the-room",
     ttl: (
       <>
-        A reading of the <em>room</em>.
+        Biophilic design <em>consultation</em>.
       </>
     ),
     body: (
       <>
-        A short, standalone engagement. Before any design begins, we read the
-        room. You receive a written reading and a set of moves the room is
-        asking for, ranked by what each would change. A reading is useful on its
-        own — many offices need fixing, not redesigning — and it is how every
-        full restructure begins.
+        A short, standalone study. We read the room and hand you the moves
+        it&rsquo;s asking for, ranked by impact. Useful on its own, and how
+        every restructure begins.
       </>
     ),
     forWhom:
@@ -51,17 +52,17 @@ const SERVICES: Svc[] = [
   },
   {
     n: "03",
+    slug: "material-direction",
     ttl: (
       <>
-        Material <em>direction</em>.
+        Sustainable material <em>sourcing</em>.
       </>
     ),
     body: (
       <>
-        If you have an architect or a designer already, and what you&rsquo;re
-        missing is the material conviction the room deserves, we come in as a
-        specialist layer. Sourcing, vetting, sample assembly, defensible claims.
-        We hand the design team a palette that holds up to a question.
+        A specialist layer for teams who already have a designer. Sourcing,
+        vetting, samples and defensible claims. A palette that holds up to a
+        question.
       </>
     ),
     forWhom:
@@ -69,18 +70,17 @@ const SERVICES: Svc[] = [
   },
   {
     n: "04",
+    slug: "aftercare",
     ttl: (
       <>
-        <em>Aftercare</em>.
+        Plant care and <em>maintenance</em>.
       </>
     ),
     body: (
       <>
-        The engagement that begins when most studios leave — six months of
-        post-handover work, a written care calendar, scheduled visits, and the
-        planting kept alive by people who know why it was specified. Included
-        with every restructure. Available on its own to projects we
-        didn&rsquo;t design, where the room is good but the room is dying.
+        The work that begins when most studios leave. Six months of visits, a
+        written care calendar, and planting kept alive by the people who
+        specified it.
       </>
     ),
     forWhom: "Finished spaces that need to stay finished.",
@@ -104,19 +104,15 @@ export default function ServicesPage() {
         <section className="svc-hero">
           <div className="ed">
             <div className="svc-hero-text" data-reveal>
-              <span className="lab">
-                <span className="bar" /> Services{" "}
-                <span className="num">— what we offer</span>
-              </span>
               <h1>
-                We restructure the workplace as a{" "}
-                <em>climate</em> — light, air, quiet, material.
+                A sustainable workspace isn&rsquo;t just a <em>luxury</em>. It
+                is the quiet and <em>comfort</em> you deserve
               </h1>
             </div>
             <div className="svc-hero-img" data-reveal>
               <img
-                src="https://images.pexels.com/photos/16615212/pexels-photo-16615212/free-photo-of-howea-plant-against-wooden-waving-wall.jpeg?auto=compress&cs=tinysrgb&w=1200&h=1500&fit=crop"
-                alt="A workspace corner — planting against carved oak"
+                src="https://images.pexels.com/photos/28461040/pexels-photo-28461040.jpeg?auto=compress&cs=tinysrgb&w=1200&h=1500&fit=crop"
+                alt="Modern office with wooden furniture and plants"
               />
             </div>
           </div>
@@ -135,6 +131,13 @@ export default function ServicesPage() {
                       <span className="lbl">For</span>
                       {s.forWhom}
                     </p>
+                    <a
+                      className="svc-explore"
+                      href={`${BASE}/services/${s.slug}/`}
+                      data-cursor
+                    >
+                      Explore this service <span className="arr" />
+                    </a>
                   </div>
                 </article>
               ))}
@@ -145,8 +148,9 @@ export default function ServicesPage() {
         <section className="svc-how">
           <div className="ed">
             <span className="lab" data-reveal>
-              <span className="bar" /> Method{" "}
-              <span className="num">— how we work</span>
+              <span className="num">
+                how we <span className="ok-accent">work</span>
+              </span>
             </span>
             <h3 data-reveal>
               We work in one <em>direction</em>, every time.
@@ -159,15 +163,11 @@ export default function ServicesPage() {
                 </div>
               ))}
             </div>
-            <p className="svc-how-note" data-reveal>
-              Four projects a quarter — concept through completion, and six
-              months past handover.
-            </p>
           </div>
         </section>
 
         <ClosingInvite
-          eyebrow="— begin a brief"
+          eyebrow="· begin a brief"
           title={
             <>
               Tell us about the <em>room</em>.

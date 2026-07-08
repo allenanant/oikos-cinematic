@@ -24,7 +24,7 @@ const CARDS: Card[] = [
     ),
     body: (
       <>
-        Pull light into the deepest, most dead centre of your space — through
+        Pull light into the deepest, most dead centre of your space, through
         the core, not just the windows.
       </>
     ),
@@ -41,7 +41,7 @@ const CARDS: Card[] = [
     ),
     body: (
       <>
-        We treat planting as air infrastructure, not decoration — a living
+        We treat planting as air infrastructure, not decoration. A living
         system measured for what it puts back into the room.
       </>
     ),
@@ -81,13 +81,10 @@ export default function AboutPage() {
           />
         </div>
         <div className="about-hero-inner">
-          <span className="lab on-dark">
-            <span className="bar" /> About{" "}
-            <span className="num">— the studio</span>
-          </span>
           <h1>
-            We restructure offices into rooms that{" "}
-            <em>breathe</em>.
+            At Oikos, we help individuals and businesses live consciously -
+            combining creativity, purpose, and sustainability{" "}
+            <span className="about-hl">in every choice</span>.
           </h1>
         </div>
       </section>
@@ -95,10 +92,6 @@ export default function AboutPage() {
       <main className="full-flow">
         <section className="about-etym">
           <div className="ed">
-            <span className="lab" data-reveal>
-              <span className="bar" /> i.{" "}
-              <span className="num">— the name</span>
-            </span>
             <div className="etym-word" data-reveal>
               <span className="word">οἶκος</span>
               <span className="gloss">Greek for home.</span>
@@ -124,12 +117,11 @@ export default function AboutPage() {
               style={{ gridColumn: "1 / 13" }}
               data-reveal
             >
-              <span className="n">ii.</span>
               <h3>
-                How a room is <em>changed</em>.
+                How your space is <em>transformed</em>
               </h3>
               <span className="meta">
-                Light, air, quiet <em>— three working systems</em>
+                Light, air, quiet <em>· three working systems</em>
               </span>
             </div>
             <div className="triad">
@@ -153,8 +145,9 @@ export default function AboutPage() {
         <section className="about-expertise">
           <div className="ed">
             <span className="lab" data-reveal>
-              <span className="bar" /> iii.{" "}
-              <span className="num">— our expertise</span>
+              <span className="num">
+                Our <span className="ok-accent">expertise</span>
+              </span>
             </span>
             <h3 data-reveal>
               Sustainability, made <em>approachable</em>.
@@ -163,15 +156,15 @@ export default function AboutPage() {
               With Oikos you benefit from deep expertise in sustainability
               consultation. We combine environmental knowledge with a
               human-centred approach, so every recommendation is actionable,
-              beautiful, and aligned with your values — sustainability
-              integrated seamlessly into the way you work, with lasting impact
-              for your team and the planet.
+              beautiful, and aligned with your values, so sustainability sits
+              naturally in the way you work, with lasting impact for your team
+              and the planet.
             </p>
           </div>
         </section>
 
         <ClosingInvite
-          eyebrow="— a greener way to work"
+          eyebrow="· a greener way to work"
           title={
             <>
               Empower your business with{" "}

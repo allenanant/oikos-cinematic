@@ -21,7 +21,6 @@ export default function FullPage() {
       <CinematicHero
         videoSrc={`${BASE}/cinematic/hero.mp4?v=7intra`}
         posterSrc={`${BASE}/cinematic/hero-poster.jpg?v=6`}
-        subtitle="Design a sustainable life that looks as beautiful as it is responsible."
       />
       <main className="full-flow">
         <Overture />

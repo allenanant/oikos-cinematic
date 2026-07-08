@@ -2,10 +2,9 @@ export default function WhyOikos() {
   return (
     <section className="full-oikos" id="why-oikos">
       <div className="ed">
-        <span className="lab" data-reveal>
-          <span className="bar" /> iii.{" "}
-          <span className="num">— why choose Oikos</span>
-        </span>
+        <h3 className="sec-title" data-reveal>
+          Why choose <em>Oikos</em>
+        </h3>
         <h2 data-reveal>
           Sustainability isn&rsquo;t about <em>perfection</em>.
           <br />

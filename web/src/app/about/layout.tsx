@@ -28,7 +28,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Oikos — About the studio.",
+  title: "Oikos · About the studio.",
   description:
     "Oikos. Greek for home, and the root of both ecology and economy. We restructure offices into rooms that breathe.",
 };

@@ -36,77 +36,82 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
       const container = containerRef.current!;
       const video = videoRef.current!;
 
-      const bindScrub = () => {
-        if (!isFinite(video.duration) || !video.duration) return;
-        video.pause();
-        video.currentTime = reverse ? video.duration - 0.01 : 0;
-
-        if (reduceMotion) return;
-
-        // Decode-aware seeking — coalesce scroll updates into one in-flight
-        // seek at a time so the clip never drifts behind the scroll. See
-        // CinematicHero for the rationale.
-        let targetTime = video.currentTime;
-        let seekRaf = 0;
-        let seeking = true;
-        const SEEK_EPS = 0.04; // ~1 frame at 24fps
-        const applySeek = () => {
-          if (!seeking) return;
-          if (!video.seeking && Math.abs(video.currentTime - targetTime) > SEEK_EPS) {
-            video.currentTime = targetTime;
-          }
-          seekRaf = requestAnimationFrame(applySeek);
+      if (reduceMotion) {
+        const initStatic = () => {
+          video.pause();
+          video.currentTime = reverse ? Math.max(video.duration - 0.01, 0) : 0;
         };
-        seekRaf = requestAnimationFrame(applySeek);
-        cleanups.push(() => {
-          seeking = false;
-          cancelAnimationFrame(seekRaf);
-        });
-
-        const st = ScrollTrigger.create({
-          trigger: container,
-          start: "top top",
-          end: PIN_END,
-          pin: true,
-          scrub: SCRUB,
-          onUpdate: (self: { progress: number }) => {
-            const progress = reverse ? 1 - self.progress : self.progress;
-            targetTime = progress * video.duration;
-          },
-        });
-        cleanups.push(() => st.kill());
-
-        const captionEl = container.querySelector(".cinema-caption");
-        if (captionEl) {
-          const captionTween = gsap.fromTo(
-            captionEl,
-            { opacity: 0, y: 24 },
-            {
-              opacity: 1,
-              y: 0,
-              ease: "expo.out",
-              duration: 1,
-              scrollTrigger: {
-                trigger: container,
-                start: "top 70%",
-                toggleActions: "play none none reverse",
-              },
-            }
-          );
-          cleanups.push(() => captionTween.scrollTrigger?.kill());
-        }
-
-        ScrollTrigger.refresh();
-      };
-
-      if (video.readyState >= 1) {
-        bindScrub();
-      } else {
-        video.addEventListener("loadedmetadata", bindScrub, { once: true });
-        cleanups.push(() =>
-          video.removeEventListener("loadedmetadata", bindScrub)
-        );
+        if (video.readyState >= 1) initStatic();
+        else video.addEventListener("loadedmetadata", initStatic, { once: true });
+        return;
       }
+
+      // Pin on MOUNT so the pin-spacer exists immediately and the section does
+      // not pop in mid-scroll once the video metadata loads. Seeking stays
+      // duration-guarded below. See CinematicHero for the rationale.
+      let targetTime = 0;
+      const st = ScrollTrigger.create({
+        trigger: container,
+        start: "top top",
+        end: PIN_END,
+        pin: true,
+        scrub: SCRUB,
+        onUpdate: (self: { progress: number }) => {
+          if (!isFinite(video.duration) || !video.duration) return;
+          const progress = reverse ? 1 - self.progress : self.progress;
+          targetTime = progress * video.duration;
+        },
+      });
+      cleanups.push(() => st.kill());
+
+      let seekRaf = 0;
+      let seeking = true;
+      const SEEK_EPS = 0.04; // ~1 frame at 24fps
+      const applySeek = () => {
+        if (!seeking) return;
+        if (
+          isFinite(video.duration) &&
+          !video.seeking &&
+          Math.abs(video.currentTime - targetTime) > SEEK_EPS
+        ) {
+          video.currentTime = targetTime;
+        }
+        seekRaf = requestAnimationFrame(applySeek);
+      };
+      const initVideo = () => {
+        video.pause();
+        video.currentTime = reverse ? Math.max(video.duration - 0.01, 0) : 0;
+        targetTime = video.currentTime;
+      };
+      if (video.readyState >= 1) initVideo();
+      else video.addEventListener("loadedmetadata", initVideo, { once: true });
+      seekRaf = requestAnimationFrame(applySeek);
+      cleanups.push(() => {
+        seeking = false;
+        cancelAnimationFrame(seekRaf);
+      });
+
+      const captionEl = container.querySelector(".cinema-caption");
+      if (captionEl) {
+        const captionTween = gsap.fromTo(
+          captionEl,
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            ease: "expo.out",
+            duration: 1,
+            scrollTrigger: {
+              trigger: container,
+              start: "top 70%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+        cleanups.push(() => captionTween.scrollTrigger?.kill());
+      }
+
+      ScrollTrigger.refresh();
     })();
 
     return () => {
@@ -135,11 +140,11 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
         <span className="cinema-eyebrow">
           <span className="cinema-bar" />
           interlude{" "}
-          <span className="cinema-num">— a moment between rooms</span>
+          <span className="cinema-num">· a moment between rooms</span>
         </span>
         <h2 className="cinema-caption">
-          Built slowly, <em>tended quietly</em>,<br />
-          lived in for years.
+          Living <em>design</em>.<br />
+          Lasting <em>impact</em>.
         </h2>
       </div>
     </section>

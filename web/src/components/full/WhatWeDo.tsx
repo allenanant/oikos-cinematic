@@ -47,20 +47,19 @@ export default function WhatWeDo() {
     <section className="full-do" id="what-we-do">
       <div className="ed">
         <div className="full-mark" style={{ gridColumn: "1 / 13" }} data-reveal>
-          <span className="n">i.</span>
           <h3>
-            What we <em>do</em>.
+            What we <em>do</em>
           </h3>
           <span className="meta">
             Three ways a room is changed{" "}
-            <em>— concept to care</em>
+            <em>· concept to care</em>
           </span>
         </div>
         <div className="do-grid">
           {SERVICES.map((s, i) => (
             <article className="do-card" key={i} data-reveal>
               <div className="img">
-                <span className="idx">— {s.idx}</span>
+                <span className="idx">· {s.idx}</span>
                 <img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
               </div>
               <h4 className="ttl">{s.ttl}</h4>

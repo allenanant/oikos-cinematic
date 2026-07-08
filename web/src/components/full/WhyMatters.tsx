@@ -68,13 +68,12 @@ export default function WhyMatters() {
     <section className="full-why" id="why-it-matters">
       <div className="ed">
         <div className="why-head" data-reveal>
-          <span className="lab">
-            <span className="bar" /> ii.{" "}
-            <span className="num">— why it matters</span>
-          </span>
+          <h2 className="sec-title">
+            Why it <em>matters</em>
+          </h2>
           <h3>
-            A workspace designed this way does more than{" "}
-            <em>look right</em>.
+            Your workplace should not just look right, it should{" "}
+            <em>feel right</em>
           </h3>
           <p className="note">
             In post-occupancy studies of biophilic office redesigns, the change
