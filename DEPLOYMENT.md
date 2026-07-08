@@ -24,14 +24,14 @@ exactly like production.
 
 ## Hosting (Vercel)
 
-`vercel.json` at the repo root is already configured:
-build = `cd web && npm install && npm run build`, output = `web/out`.
-Point the Vercel project's Git integration at this repo's `main` and every push
-deploys automatically.
+The Vercel project `oikos` is linked to this repo (`main`), with dashboard settings:
+Root Directory = `web`, Build Command = `npm run build`, Output Directory = `out`,
+Framework = Other (static). `web/vercel.json` keeps trailing slashes on.
+Every push to `main` builds and deploys production automatically — for Allen and
+for Angelina.
 
-Live production currently deploys from the separate `oikos-site` repo (a frozen
-static snapshot). Switching Vercel to this repo is the one remaining step — after
-that, Angelina edits `web/src`, pushes, and the site updates.
+Rollback target if a deploy ever misbehaves: `dpl_7FSurjEyr9EVf3gRvrnk8NiiJLEV`
+(the frozen June 19 snapshot from `oikos-site`).
 
 ## Verification story (2026-07-09)
 
