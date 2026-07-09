@@ -110,6 +110,44 @@ export default function AboutPage() {
           </div>
         </section>
 
+        <section className="about-founder">
+          <div className="ed">
+            <div className="founder-note" data-reveal>
+              <span className="founder-eyebrow">
+                <span className="founder-bar" />A note from the founder
+              </span>
+              <div className="founder-body">
+                <p>
+                  I&rsquo;m Angelina, a lawyer by profession and a nature
+                  enthusiast at heart. After spending years working in
+                  uninspiring spaces, I came to realize how deeply our
+                  surroundings influence the way we think, feel, and work. I
+                  found myself longing for the calm, clarity, and energy that
+                  nature brings, and I began to wonder why our workplaces
+                  couldn&rsquo;t offer the same experience.
+                </p>
+                <p>
+                  That question became the foundation of this company. My
+                  mission is to transform everyday workspaces into environments
+                  that are not only beautiful but also healthier, more
+                  sustainable, and deeply connected to nature. Through
+                  thoughtful biophilic designs, I aim to help people and
+                  businesses create spaces that inspire creativity, enhance
+                  well-being, and remind us that even in the busiest offices, we
+                  don&rsquo;t have to lose{" "}
+                  <em>our connection with the natural world.</em>
+                </p>
+              </div>
+              <div className="founder-sign-row">
+                <span className="founder-sign">Angelina</span>
+                <span className="founder-role">
+                  Founder &middot; Oikos by Angelina
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="about-triad">
           <div className="ed">
             <div

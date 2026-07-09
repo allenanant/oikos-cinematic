@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
 /* ============================================================
    /full route — editorial canvas that flows from the cinematic
    hero through nine sections of varied rhythm.
@@ -2218,3 +2219,66 @@ a.cstud-val:hover { color: var(--color-terracotta); }
 .legal-body-in a{color:var(--color-terracotta)}
 .legal-back{margin-top:38px}
 .legal-back a{color:var(--ink-62);text-decoration:none;font-size:14px}
+
+/* about — a personal note from the founder */
+.about-founder {
+  padding: clamp(52px, 8vh, 96px) 0 clamp(36px, 6vh, 68px);
+}
+.about-founder .ed {
+  display: block;
+}
+.about-founder .founder-note {
+  max-width: 660px;
+  margin: 0 auto;
+}
+.founder-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink-62);
+}
+.founder-bar {
+  width: 28px;
+  height: 1px;
+  background: var(--color-terracotta);
+  display: inline-block;
+}
+.founder-body {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.72;
+  color: var(--ink);
+}
+.founder-body p {
+  margin: 0 0 18px;
+}
+.founder-body p:last-child {
+  margin: 0;
+}
+.founder-body em {
+  font-style: italic;
+  color: var(--color-terracotta);
+}
+.founder-sign-row {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.founder-sign {
+  font-family: "Sacramento", cursive;
+  font-size: clamp(42px, 4.6vw, 56px);
+  line-height: 1;
+  color: var(--color-terracotta);
+}
+.founder-role {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: var(--ink-62);
+}
