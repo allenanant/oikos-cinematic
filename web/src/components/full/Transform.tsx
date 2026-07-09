@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export default function Transform() {
   const frameRef = useRef<HTMLDivElement | null>(null);
   const afterRef = useRef<HTMLDivElement | null>(null);
@@ -83,7 +85,7 @@ export default function Transform() {
           </div>
           <div className="full-ba-img full-ba-after" ref={afterRef}>
             <img
-              src="https://images.pexels.com/photos/37472187/pexels-photo-37472187.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1029&fit=crop"
+              src={`${BASE}/photos/nature-after.jpg`}
               alt="The same floor restructured, warm with plants, wood and daylight"
               loading="lazy"
               decoding="async"
