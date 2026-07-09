@@ -22,7 +22,7 @@ export default function FullFooter() {
             <span className="foot-ic foot-ic-instagram" />
           </a>
           <a
-            href="https://www.facebook.com/p/Oikos-Angelina-61591772999715/"
+            href="https://www.facebook.com/share/1bfAHnvYTZ/"
             target="_blank"
             rel="noreferrer"
             aria-label="Facebook"
