@@ -67,7 +67,7 @@ export default function Transform() {
         <div className="stamp-row" data-reveal>
           <div className="left">
             <h3>
-              When <em>nature</em> moves in.
+              When <em>nature</em> moves in
             </h3>
           </div>
         </div>
