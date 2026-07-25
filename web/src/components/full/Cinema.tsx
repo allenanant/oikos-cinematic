@@ -1,6 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import type { CSSProperties } from "react";
+import {
+  canPlayVideo,
+  isFullyBuffered,
+  SEEK_EPS,
+  SRC_FPS,
+} from "@/lib/videoGate";
 
 type Props = {
   videoSrc: string;
@@ -36,63 +43,9 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
       const container = containerRef.current!;
       const video = videoRef.current!;
 
-      if (reduceMotion) {
-        const initStatic = () => {
-          video.pause();
-          video.currentTime = reverse ? Math.max(video.duration - 0.01, 0) : 0;
-        };
-        if (video.readyState >= 1) initStatic();
-        else video.addEventListener("loadedmetadata", initStatic, { once: true });
-        return;
-      }
-
-      // Pin on MOUNT so the pin-spacer exists immediately and the section does
-      // not pop in mid-scroll once the video metadata loads. Seeking stays
-      // duration-guarded below. See CinematicHero for the rationale.
-      let targetTime = 0;
-      const st = ScrollTrigger.create({
-        trigger: container,
-        start: "top top",
-        end: PIN_END,
-        pin: true,
-        scrub: SCRUB,
-        onUpdate: (self: { progress: number }) => {
-          if (!isFinite(video.duration) || !video.duration) return;
-          const progress = reverse ? 1 - self.progress : self.progress;
-          targetTime = progress * video.duration;
-        },
-      });
-      cleanups.push(() => st.kill());
-
-      let seekRaf = 0;
-      let seeking = true;
-      const SEEK_EPS = 0.04; // ~1 frame at 24fps
-      const applySeek = () => {
-        if (!seeking) return;
-        if (
-          isFinite(video.duration) &&
-          !video.seeking &&
-          Math.abs(video.currentTime - targetTime) > SEEK_EPS
-        ) {
-          video.currentTime = targetTime;
-        }
-        seekRaf = requestAnimationFrame(applySeek);
-      };
-      const initVideo = () => {
-        video.pause();
-        video.currentTime = reverse ? Math.max(video.duration - 0.01, 0) : 0;
-        targetTime = video.currentTime;
-      };
-      if (video.readyState >= 1) initVideo();
-      else video.addEventListener("loadedmetadata", initVideo, { once: true });
-      seekRaf = requestAnimationFrame(applySeek);
-      cleanups.push(() => {
-        seeking = false;
-        cancelAnimationFrame(seekRaf);
-      });
-
+      // The caption reveal is cheap and belongs on every device.
       const captionEl = container.querySelector(".cinema-caption");
-      if (captionEl) {
+      if (captionEl && !reduceMotion) {
         const captionTween = gsap.fromTo(
           captionEl,
           { opacity: 0, y: 24 },
@@ -111,6 +64,83 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
         cleanups.push(() => captionTween.scrollTrigger?.kill());
       }
 
+      // See CinematicHero for the rationale. On mobile this section becomes a
+      // static 100vh poster with the caption still revealing on scroll.
+      if (!canPlayVideo()) {
+        container.dataset.video = "off";
+        ScrollTrigger.refresh();
+        return;
+      }
+      container.dataset.video = "on";
+
+      video.preload = "auto";
+      video.src = videoSrc;
+      video.load();
+
+      let targetTime = 0;
+      let active = false;
+      let ready = false;
+      let seekRaf = 0;
+
+      const markReady = () => {
+        if (ready || !isFullyBuffered(video)) return;
+        ready = true;
+        // reverse: this section opens on the LAST frame.
+        if (reverse) targetTime = Math.max(video.duration - 0.01, 0);
+        container.dataset.videoReady = "true";
+        video.currentTime = targetTime;
+      };
+      video.addEventListener("progress", markReady);
+      video.addEventListener("canplaythrough", markReady);
+      cleanups.push(() => {
+        video.removeEventListener("progress", markReady);
+        video.removeEventListener("canplaythrough", markReady);
+      });
+
+      // Some browsers refuse to paint a <video> that has never played. Prime it
+      // muted, then park it on the frame this section should open on.
+      const prime = () => {
+        video
+          .play()
+          .then(() => {
+            video.pause();
+            video.currentTime = reverse ? Math.max(video.duration - 0.01, 0) : 0;
+          })
+          .catch(() => video.pause());
+      };
+      video.addEventListener("loadeddata", prime, { once: true });
+
+      // Pin on MOUNT so the pin-spacer exists immediately and the section does
+      // not pop in mid-scroll once the video metadata loads. Seeking stays
+      // duration-guarded below. See CinematicHero for the rationale.
+      const st = ScrollTrigger.create({
+        trigger: container,
+        start: "top top",
+        end: PIN_END,
+        pin: true,
+        scrub: SCRUB,
+        // Seek only while pinned — this loop used to run for the whole session.
+        onToggle: (self: { isActive: boolean }) => {
+          active = self.isActive;
+        },
+        onUpdate: (self: { progress: number }) => {
+          if (!isFinite(video.duration) || !video.duration) return;
+          const progress = reverse ? 1 - self.progress : self.progress;
+          targetTime = progress * video.duration;
+        },
+      });
+      cleanups.push(() => st.kill());
+      active = st.isActive;
+
+      const applySeek = () => {
+        seekRaf = requestAnimationFrame(applySeek);
+        if (!active || !ready || document.hidden || video.seeking) return;
+        const t = Math.round(targetTime * SRC_FPS) / SRC_FPS;
+        if (Math.abs(video.currentTime - t) > SEEK_EPS) video.currentTime = t;
+      };
+      seekRaf = requestAnimationFrame(applySeek);
+      cleanups.push(() => cancelAnimationFrame(seekRaf));
+
       ScrollTrigger.refresh();
     })();
 
@@ -118,21 +148,22 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
       cancelled = true;
       cleanups.forEach((c) => c());
     };
-  }, [reverse]);
+  }, [reverse, videoSrc]);
 
   return (
-    <section ref={containerRef} className="full-cinema">
+    <section
+      ref={containerRef}
+      className="full-cinema"
+      data-video="off"
+      style={
+        posterSrc
+          ? ({ "--poster": `url("${posterSrc}")` } as CSSProperties)
+          : undefined
+      }
+    >
       <div className="cinema-media">
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          poster={posterSrc}
-          muted
-          playsInline
-          preload="auto"
-          autoPlay={false}
-          loop={false}
-        />
+        {/* No src, no <source>, preload="none". Zero bytes until gated. */}
+        <video ref={videoRef} poster={posterSrc} muted playsInline preload="none" />
       </div>
       <div className="cinema-overlay" aria-hidden />
 

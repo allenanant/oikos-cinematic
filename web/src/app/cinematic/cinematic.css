@@ -90,6 +90,25 @@
   background: var(--color-forest);
 }
 .cinematic-media { position: absolute; inset: 0; overflow: hidden; }
+/* The poster paints straight from the static HTML, so the hero is never empty:
+   on mobile it is the whole treatment, and on desktop it holds the frame until
+   the clip has fully buffered. Same grade and overscan as the video so the
+   cross-fade is invisible. */
+.cinematic-media::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: var(--poster);
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.95) contrast(1.04) brightness(0.92);
+  transform: scale(1.02);
+  transform-origin: center;
+}
+.cinematic-media video { position: relative; z-index: 1; opacity: 0; transition: opacity 0.6s ease; }
+.cinematic-hero[data-video-ready="true"] .cinematic-media video { opacity: 1; }
+/* Belt and braces: if a src ever leaks back into the markup, nothing composites
+   on a device that opted out. */
+.cinematic-hero[data-video="off"] .cinematic-media video { display: none; }
 .cinematic-media video,
 .cinematic-media canvas {
   width: 100%; height: 100%;

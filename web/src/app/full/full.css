@@ -447,6 +447,22 @@
   color: var(--color-cream);
 }
 .full-cinema .cinema-media { position: absolute; inset: 0; overflow: hidden; }
+/* Poster holds the frame — the whole treatment on mobile, and on desktop it
+   stays up until the clip has fully buffered. Matches the video's grade and
+   overscan so the cross-fade is invisible. */
+.full-cinema .cinema-media::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: var(--poster);
+  background-size: cover;
+  background-position: center;
+  filter: saturate(0.92) contrast(1.04) brightness(0.78);
+  transform: scale(1.02);
+  transform-origin: center;
+}
+.full-cinema .cinema-media video { position: relative; z-index: 1; opacity: 0; transition: opacity 0.6s ease; }
+.full-cinema[data-video-ready="true"] .cinema-media video { opacity: 1; }
+.full-cinema[data-video="off"] .cinema-media video { display: none; }
 .full-cinema .cinema-media video {
   width: 100%; height: 100%;
   object-fit: cover; display: block;

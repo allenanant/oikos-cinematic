@@ -1,3 +1,5 @@
+import { px, pxSet } from "@/lib/pexels";
+
 type Props = {
   eyebrow?: string;
   title?: React.ReactNode;
@@ -31,7 +33,19 @@ export default function ClosingInvite({
   return (
     <section className="full-closing" id="brief">
       <div className="closing-bg">
-        <img src={img} alt={alt} />
+        {/* This sits at the very bottom of seven routes. Without loading="lazy"
+            React preloads it at high priority, so 400+ KB of footer decoration
+            was racing the hero for bandwidth on every page. */}
+        <img
+          src={px(img, 1600, 900)}
+          srcSet={pxSet(img, [800, 1200, 1600, 2000], 16 / 9)}
+          sizes="100vw"
+          alt={alt}
+          width={1600}
+          height={900}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div className="closing-inner" data-reveal>
         <h2>{title}</h2>

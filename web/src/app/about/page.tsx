@@ -1,3 +1,4 @@
+import { px, pxSet } from "@/lib/pexels";
 import Cursor from "@/components/cinematic/Cursor";
 import FullNav from "@/components/full/FullNav";
 import ClosingInvite from "@/components/full/ClosingInvite";
@@ -67,6 +68,9 @@ const CARDS: Card[] = [
   },
 ];
 
+const ABOUT_HERO =
+  "https://images.pexels.com/photos/35566906/pexels-photo-35566906/free-photo-of-modern-office-atrium-with-greenery.jpeg";
+
 export default function AboutPage() {
   return (
     <>
@@ -75,9 +79,16 @@ export default function AboutPage() {
 
       <section className="about-hero">
         <div className="about-hero-bg">
+          {/* LCP for this route — stays eager and gets an explicit priority. */}
           <img
-            src="https://images.pexels.com/photos/35566906/pexels-photo-35566906/free-photo-of-modern-office-atrium-with-greenery.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1500&fit=crop"
+            src={px(ABOUT_HERO, 2000, 1250)}
+            srcSet={pxSet(ABOUT_HERO, [1200, 1600, 2000, 2400], 8 / 5)}
+            sizes="100vw"
             alt=""
+            width={2000}
+            height={1250}
+            fetchPriority="high"
+            decoding="async"
           />
         </div>
         <div className="about-hero-inner">
@@ -166,7 +177,18 @@ export default function AboutPage() {
               {CARDS.map((c, i) => (
                 <article className="triad-row" key={i} data-reveal>
                   <div className="img">
-                    <img src={c.img} alt={c.alt} />
+                    {/* Below the fold — lazy, or React preloads all three at
+                        top priority against the hero. 4/3 slot, ~612x459. */}
+                    <img
+                      src={px(c.img, 1240, 930)}
+                      srcSet={pxSet(c.img, [620, 900, 1240], 4 / 3)}
+                      sizes="(max-width: 780px) 100vw, 45vw"
+                      alt={c.alt}
+                      width={1240}
+                      height={930}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                   <div className="body">
                     <span className="n">{c.n}</span>

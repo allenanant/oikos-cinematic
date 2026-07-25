@@ -1,3 +1,4 @@
+import { px, pxSet } from "@/lib/pexels";
 import Cursor from "@/components/cinematic/Cursor";
 import FullNav from "@/components/full/FullNav";
 import ClosingInvite from "@/components/full/ClosingInvite";
@@ -38,7 +39,17 @@ export default function ServiceDetail({ data }: { data: ServiceData }) {
 
       <section className="svcd-hero">
         <div className="svcd-hero-bg">
-          <img src={data.hero.image} alt="" />
+          {/* LCP for all four service routes. */}
+          <img
+            src={px(data.hero.image, 2000, 1125)}
+            srcSet={pxSet(data.hero.image, [1000, 1400, 2000], 16 / 9)}
+            sizes="100vw"
+            alt=""
+            width={2000}
+            height={1125}
+            fetchPriority="high"
+            decoding="async"
+          />
         </div>
         <div className="svcd-hero-inner oik-hero-c">
           <a className="svcd-back" href={`${BASE}/services/`}>
@@ -60,7 +71,19 @@ export default function ServiceDetail({ data }: { data: ServiceData }) {
               {data.approach.steps.map((s) => (
                 <article className="svcd-step" key={s.n} data-reveal>
                   <figure className="svcd-step-img">
-                    <img src={s.image} alt={s.alt} loading="lazy" decoding="async" />
+                    {/* The slot is 2:1 (~616x308) but the sources were 1000px
+                        portraits, so object-fit threw away half of every
+                        download. Ask Pexels for the crop we actually render. */}
+                    <img
+                      src={px(s.image, 1240, 620)}
+                      srcSet={pxSet(s.image, [620, 900, 1240], 2)}
+                      sizes="(max-width: 680px) 100vw, (max-width: 1024px) 45vw, 30vw"
+                      alt={s.alt}
+                      width={1240}
+                      height={620}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </figure>
                   <span className="n">{s.n}</span>
                   <div className="svcd-step-body">
@@ -77,7 +100,18 @@ export default function ServiceDetail({ data }: { data: ServiceData }) {
         <section className="svcd-detail">
           <div className="ed">
             <div className="svcd-detail-img" data-reveal>
-              <img src={data.detail.image} alt={data.detail.alt} loading="lazy" />
+              {/* 4/5 portrait slot fed from landscape sources — request the
+                  portrait crop instead of cropping it away client-side. */}
+              <img
+                src={px(data.detail.image, 1060, 1325)}
+                srcSet={pxSet(data.detail.image, [520, 800, 1060], 4 / 5)}
+                sizes="(max-width: 780px) 100vw, 42vw"
+                alt={data.detail.alt}
+                width={1060}
+                height={1325}
+                loading="lazy"
+                decoding="async"
+              />
               {data.detail.caption && <span className="cap">{data.detail.caption}</span>}
             </div>
             <div className="svcd-detail-text" data-reveal>

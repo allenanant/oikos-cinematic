@@ -1,26 +1,16 @@
 import type { Metadata } from "next";
-import { EB_Garamond, Inter, Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const ebGaramond = EB_Garamond({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600"],
-  variable: "--font-display",
-  display: "swap",
-});
-
+// EB Garamond and Poppins used to be declared here too. Every shipping page is
+// wrapped by full/layout.tsx, which redefines --font-display and --font-editorial
+// with Fraunces and Cormorant, so those two families never painted a glyph — they
+// were just 115 KB of woff2 preloaded at top priority against the LCP image.
+// Inter stays because <body> itself sits outside the full-root wrapper.
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-sans",
-  display: "swap",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  variable: "--font-body",
   display: "swap",
 });
 
@@ -41,10 +31,18 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${ebGaramond.variable} ${inter.variable} ${poppins.variable}`}
-    >
+    <html lang="en" className={inter.variable}>
+      <head>
+        {/* Nearly all the photography is served from Pexels, so the first image
+            byte was waiting on a cold DNS + TCP + TLS handshake. */}
+        <link rel="preconnect" href="https://images.pexels.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://images.pexels.com" />
+        {/* full.css still @imports Playfair and Sacramento from Google, which is
+            a serialised chain: HTML -> full.css -> googleapis -> gstatic. These
+            at least warm the two connections while the CSS is parsing. */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+      </head>
       <body className="min-h-screen overflow-x-hidden">{children}</body>
     </html>
   );

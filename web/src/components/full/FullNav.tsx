@@ -67,7 +67,16 @@ export default function FullNav({ darkHero = true, lightAt = 1.05, active }: Pro
     >
       <nav className="full-pill" aria-label="Primary">
         <a href={`${BASE}/full/`} className="brand" aria-label="Oikos home">
-          <img src={`${BASE}/logo-light.svg`} alt="Oikos" className="logo" />
+          {/* CSS sets height:26px/width:auto, so without an intrinsic ratio the
+              nav pill reflows sideways the moment the SVG parses. 1141:751. */}
+          <img
+            src={`${BASE}/logo-light.svg`}
+            alt="Oikos"
+            className="logo"
+            width={40}
+            height={26}
+            fetchPriority="high"
+          />
         </a>
         <span className="divider" aria-hidden />
         <div className="links">

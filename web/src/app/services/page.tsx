@@ -1,3 +1,4 @@
+import { px, pxSet } from "@/lib/pexels";
 import Cursor from "@/components/cinematic/Cursor";
 import FullNav from "@/components/full/FullNav";
 import ClosingInvite from "@/components/full/ClosingInvite";
@@ -94,6 +95,9 @@ const STEPS = [
   { n: "04", t: "Stay to keep it alive" },
 ];
 
+const SVC_HERO =
+  "https://images.pexels.com/photos/28461040/pexels-photo-28461040.jpeg";
+
 export default function ServicesPage() {
   return (
     <>
@@ -110,9 +114,16 @@ export default function ServicesPage() {
               </h1>
             </div>
             <div className="svc-hero-img" data-reveal>
+              {/* 4/5 slot, ~409x511 desktop. Was a 1200x1500 source. */}
               <img
-                src="https://images.pexels.com/photos/28461040/pexels-photo-28461040.jpeg?auto=compress&cs=tinysrgb&w=1200&h=1500&fit=crop"
+                src={px(SVC_HERO, 840, 1050)}
+                srcSet={pxSet(SVC_HERO, [420, 620, 840], 4 / 5)}
+                sizes="(max-width: 1100px) 100vw, 30vw"
                 alt="Modern office with wooden furniture and plants"
+                width={840}
+                height={1050}
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
           </div>

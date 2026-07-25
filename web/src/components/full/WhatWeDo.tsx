@@ -1,3 +1,5 @@
+import { px, pxSet } from "@/lib/pexels";
+
 type Service = {
   idx: string;
   img: string;
@@ -60,7 +62,18 @@ export default function WhatWeDo() {
             <article className="do-card" key={i} data-reveal>
               <div className="img">
                 <span className="idx">· {s.idx}</span>
-                <img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+                {/* 4/5 card: ~403x504 desktop, ~346x433 mobile. The sources
+                    were 1400x1750 — about 12x the pixels actually painted. */}
+                <img
+                  src={px(s.img, 820, 1025)}
+                  srcSet={pxSet(s.img, [420, 620, 820, 900], 4 / 5)}
+                  sizes="(max-width: 780px) 100vw, (max-width: 1100px) 45vw, 28vw"
+                  alt={s.alt}
+                  width={820}
+                  height={1025}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <h4 className="ttl">{s.ttl}</h4>
               <p className="desc">{s.desc}</p>

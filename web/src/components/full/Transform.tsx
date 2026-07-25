@@ -1,8 +1,12 @@
 "use client";
+import { px, pxSet } from "@/lib/pexels";
 
 import { useEffect, useRef } from "react";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+const BEFORE_IMG =
+  "https://images.pexels.com/photos/5483233/pexels-photo-5483233.jpeg";
 
 export default function Transform() {
   const frameRef = useRef<HTMLDivElement | null>(null);
@@ -77,19 +81,39 @@ export default function Transform() {
           <span className="full-ba-label before">Before</span>
           <div className="full-ba-img full-ba-before">
             <img
-              src="https://images.pexels.com/photos/5483233/pexels-photo-5483233.jpeg?auto=compress&cs=tinysrgb&w=2400&h=1029&fit=crop"
+              src={px(BEFORE_IMG, 1800, 771)}
+              srcSet={pxSet(BEFORE_IMG, [1200, 1800, 2400], 2400 / 1029)}
+              sizes="100vw"
               alt="A bare, cool open-plan office before restructure"
+              width={1800}
+              height={771}
               loading="lazy"
               decoding="async"
             />
           </div>
           <div className="full-ba-img full-ba-after" ref={afterRef}>
-            <img
-              src={`${BASE}/photos/nature-after.jpg`}
-              alt="The same floor restructured, warm with plants, wood and daylight"
-              loading="lazy"
-              decoding="async"
-            />
+            {/* The only local content photo, so it needs a real <picture> —
+                Pexels does the format negotiation for everything else. */}
+            <picture>
+              <source
+                type="image/avif"
+                srcSet={`${BASE}/photos/nature-after-1200.avif 1200w, ${BASE}/photos/nature-after-1800.avif 1800w, ${BASE}/photos/nature-after-2400.avif 2400w`}
+                sizes="100vw"
+              />
+              <source
+                type="image/webp"
+                srcSet={`${BASE}/photos/nature-after-1200.webp 1200w, ${BASE}/photos/nature-after-1800.webp 1800w, ${BASE}/photos/nature-after-2400.webp 2400w`}
+                sizes="100vw"
+              />
+              <img
+                src={`${BASE}/photos/nature-after.jpg`}
+                alt="The same floor restructured, warm with plants, wood and daylight"
+                width={1915}
+                height={821}
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
           </div>
           <span className="full-ba-label after">After</span>
           <div className="full-ba-divider" ref={dividerRef} />

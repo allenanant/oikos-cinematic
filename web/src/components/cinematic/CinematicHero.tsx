@@ -1,6 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import type { CSSProperties } from "react";
+import {
+  canPlayVideo,
+  isFullyBuffered,
+  SEEK_EPS,
+  SRC_FPS,
+} from "@/lib/videoGate";
 
 type Props = { videoSrc: string; posterSrc?: string; subtitle?: string };
 
@@ -42,18 +49,71 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
       gsap.set(titleSpans, { yPercent: 110, opacity: 1 });
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
       tl.to(titleSpans, { yPercent: 0, duration: 1.2, stagger: 0.13, delay: 0.25 });
+      cleanups.push(() => tl.kill());
+
+      // Phones, tablets, Save-Data and reduced-motion stop here. Nothing has
+      // requested the clip yet (the <video> ships with no src), so bailing out
+      // costs zero bytes. Without the pin the section is a plain 100vh poster
+      // block, which is what the CSS already declares — no layout to repair.
+      if (!canPlayVideo()) {
+        container.dataset.video = "off";
+        ScrollTrigger.refresh();
+        return;
+      }
+      container.dataset.video = "on";
+
+      // Only now do bytes move.
+      video.preload = "auto";
+      video.src = videoSrc;
+      video.load();
+
+      let targetTime = 0;
+      let active = false;
+      let ready = false;
+      let seekRaf = 0;
+
+      const markReady = () => {
+        if (ready || !isFullyBuffered(video)) return;
+        ready = true;
+        container.dataset.videoReady = "true"; // CSS cross-fades video over poster
+        video.currentTime = targetTime;
+      };
+      video.addEventListener("progress", markReady);
+      video.addEventListener("canplaythrough", markReady);
+      cleanups.push(() => {
+        video.removeEventListener("progress", markReady);
+        video.removeEventListener("canplaythrough", markReady);
+      });
+
+      // Some browsers refuse to paint a <video> that has never played, leaving a
+      // black box under the cross-fade. Prime it muted, then park it.
+      const prime = () => {
+        video
+          .play()
+          .then(() => {
+            video.pause();
+            video.currentTime = 0;
+          })
+          .catch(() => video.pause());
+      };
+      video.addEventListener("loadeddata", prime, { once: true });
 
       // Create the pin on MOUNT — not inside a video-load callback. Inserting
       // the pin-spacer late (after loadedmetadata) shifts the layout and makes
       // the next section pop in mid-scroll. The seek itself is duration-guarded
       // below, so it is safe to pin before the video reports its duration.
-      let targetTime = 0;
       const st = ScrollTrigger.create({
         trigger: container,
         start: "top top",
         end: PIN_END,
         pin: true,
         scrub: SCRUB,
+        // Seek only while the section is pinned. This loop used to run from
+        // mount to unmount, burning a frame callback forever on a section the
+        // user had scrolled past screens ago.
+        onToggle: (self: { isActive: boolean }) => {
+          active = self.isActive;
+        },
         onUpdate: (self: { progress: number }) => {
           if (isFinite(video.duration) && video.duration) {
             targetTime = self.progress * video.duration;
@@ -61,6 +121,7 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
         },
       });
       cleanups.push(() => st.kill());
+      active = st.isActive;
 
       const fadeTween = gsap.to(
         container.querySelector(".cinematic-foreground"),
@@ -78,33 +139,14 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
       );
       cleanups.push(() => fadeTween.scrollTrigger?.kill());
 
-      // Decode-aware seeking: coalesce ScrollTrigger updates into one in-flight
-      // seek so the clip never drifts behind the scroll on a heavy page.
-      let seekRaf = 0;
-      let seeking = true;
-      const SEEK_EPS = 0.04; // ~1 frame at 24fps
       const applySeek = () => {
-        if (!seeking) return;
-        if (
-          isFinite(video.duration) &&
-          !video.seeking &&
-          Math.abs(video.currentTime - targetTime) > SEEK_EPS
-        ) {
-          video.currentTime = targetTime;
-        }
         seekRaf = requestAnimationFrame(applySeek);
+        if (!active || !ready || document.hidden || video.seeking) return;
+        const t = Math.round(targetTime * SRC_FPS) / SRC_FPS; // snap to frame grid
+        if (Math.abs(video.currentTime - t) > SEEK_EPS) video.currentTime = t;
       };
-      const initVideo = () => {
-        video.pause();
-        video.currentTime = 0;
-      };
-      if (video.readyState >= 1) initVideo();
-      else video.addEventListener("loadedmetadata", initVideo, { once: true });
       seekRaf = requestAnimationFrame(applySeek);
-      cleanups.push(() => {
-        seeking = false;
-        cancelAnimationFrame(seekRaf);
-      });
+      cleanups.push(() => cancelAnimationFrame(seekRaf));
 
       ScrollTrigger.refresh();
     })();
@@ -113,21 +155,26 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
       cancelled = true;
       cleanups.forEach((c) => c());
     };
-  }, []);
+  }, [videoSrc]);
 
   return (
-    <section ref={containerRef} className="cinematic-hero">
+    <section
+      ref={containerRef}
+      className="cinematic-hero"
+      data-video="off"
+      style={
+        posterSrc
+          ? ({ "--poster": `url("${posterSrc}")` } as CSSProperties)
+          : undefined
+      }
+    >
       <div className="cinematic-media">
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          poster={posterSrc}
-          muted
-          playsInline
-          preload="auto"
-          autoPlay={false}
-          loop={false}
-        />
+        {/*
+          No src, no <source>, preload="none". The preload scanner has nothing to
+          find, so this element is provably zero bytes until the desktop gate in
+          the effect assigns video.src. Never put src back into this JSX.
+        */}
+        <video ref={videoRef} poster={posterSrc} muted playsInline preload="none" />
       </div>
       <div className="cinematic-overlay" aria-hidden />
 
