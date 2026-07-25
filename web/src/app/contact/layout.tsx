@@ -28,6 +28,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact/" },
   title: "Contact · Oikos",
   description:
     "Begin a conversation with Oikos, a Delhi studio that restructures offices around light, air, quiet and material. Tell us about the room and we will read it back to you.",

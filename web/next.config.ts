@@ -13,9 +13,8 @@ const nextConfig: NextConfig = {
   assetPrefix: basePath || undefined,
   images: { unoptimized: true },
   trailingSlash: true,
-  // Skip type + lint checks during build — runtime safety still applies.
+  // Skip type checks during build — runtime safety still applies.
   typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
 };
 
 export default nextConfig;

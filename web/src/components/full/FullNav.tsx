@@ -13,7 +13,7 @@ type Props = {
 };
 
 const LINKS: { href: string; label: string; key: Props["active"] }[] = [
-  { href: `${BASE}/full/`, label: "Home", key: "home" },
+  { href: `${BASE}/`, label: "Home", key: "home" },
   { href: `${BASE}/about/`, label: "About", key: "about" },
   { href: `${BASE}/services/`, label: "Services", key: "services" },
   { href: `${BASE}/contact/`, label: "Contact", key: "contact" },
@@ -66,7 +66,7 @@ export default function FullNav({ darkHero = true, lightAt = 1.05, active }: Pro
       }`}
     >
       <nav className="full-pill" aria-label="Primary">
-        <a href={`${BASE}/full/`} className="brand" aria-label="Oikos home">
+        <a href={`${BASE}/`} className="brand" aria-label="Oikos home">
           {/* CSS sets height:26px/width:auto, so without an intrinsic ratio the
               nav pill reflows sideways the moment the SVG parses. 1141:751. */}
           <img

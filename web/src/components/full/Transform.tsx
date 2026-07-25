@@ -33,6 +33,8 @@ export default function Transform() {
     };
 
     const onDown = (e: MouseEvent | TouchEvent) => {
+      // Without this Chrome promotes the gesture to a native image drag.
+      if ("clientX" in e) e.preventDefault();
       dragging = true;
       const x = "touches" in e ? e.touches[0].clientX : e.clientX;
       setPos(x);
@@ -84,6 +86,7 @@ export default function Transform() {
               src={px(BEFORE_IMG, 1800, 772)}
               srcSet={pxSet(BEFORE_IMG, [1200, 1800, 2400], 2400 / 1029)}
               sizes="(min-width: 1480px) 1480px, 100vw"
+              draggable={false}
               alt="A bare, cool open-plan office before restructure"
               width={1800}
               height={771}
@@ -107,6 +110,7 @@ export default function Transform() {
               />
               <img
                 src={`${BASE}/photos/nature-after.jpg`}
+                draggable={false}
                 alt="The same floor restructured, warm with plants, wood and daylight"
                 width={1800}
                 height={772}

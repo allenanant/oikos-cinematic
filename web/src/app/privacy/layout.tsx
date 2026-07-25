@@ -27,6 +27,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacy/" },
   title: "Privacy Policy · Oikos by Angelina",
   description:
     "How Oikos by Angelina handles personal information collected through this website.",

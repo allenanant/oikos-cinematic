@@ -28,6 +28,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/services/" },
   title: "Oikos · Services.",
   description:
     "Sustainable office design as a climate — light, air, quiet and material. Our services: sustainable workplace design, biophilic design consultation, sustainable material sourcing, and plant care and maintenance.",

@@ -27,6 +27,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/terms/" },
   title: "Terms and Conditions · Oikos by Angelina",
   description: "The terms that govern use of the Oikos by Angelina website.",
 };

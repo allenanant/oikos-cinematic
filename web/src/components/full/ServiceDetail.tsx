@@ -60,7 +60,7 @@ export default function ServiceDetail({ data }: { data: ServiceData }) {
         </div>
       </section>
 
-      <main className="full-flow">
+      <main className="full-flow" data-service={data.slug}>
         {/* APPROACH */}
         <section className="svcd-approach">
           <div className="ed">

@@ -91,11 +91,11 @@ export default function ContactPage() {
                   <span className="cstud-lab">Instagram</span>
                   <a
                     className="cstud-val"
-                    href="https://instagram.com/oikos.studio"
+                    href="https://instagram.com/oikosbyangelina"
                     target="_blank"
                     rel="noreferrer"
                   >
-                    @oikos.studio
+                    @oikosbyangelina
                   </a>
                 </div>
               </div>

@@ -28,9 +28,11 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Oikos · A studio for biophilic workplaces.",
+  title: "Oikos by Angelina · A studio for biophilic workplaces",
   description:
     "A working studio for biophilic workplaces. Quieter rooms, denser air, slower light.",
+  // The build promotes /full/ to the root, so both URLs serve this page.
+  alternates: { canonical: "/" },
 };
 
 export default function FullLayout({
