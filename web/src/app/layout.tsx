@@ -24,7 +24,15 @@ export const metadata: Metadata = {
     description: "For a life that sustains you.",
     type: "website",
   },
-  icons: { icon: "/favicon.ico" },
+  // Was still the default Vercel triangle. Now the Oikos leaf mark in cream on
+  // brand forest, matching the nav pill so it reads on light and dark tab strips.
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({
