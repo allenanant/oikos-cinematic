@@ -73,9 +73,22 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
       }
       container.dataset.video = "on";
 
-      video.preload = "auto";
-      video.src = videoSrc;
-      video.load();
+      // This section sits about three screens down, so fetching it at load just
+      // means 2.4 MB competing with the hero for bandwidth. Start it when the
+      // user is within two viewports — far enough ahead that it has buffered by
+      // the time they arrive.
+      const io = new IntersectionObserver(
+        ([entry], obs) => {
+          if (!entry.isIntersecting) return;
+          obs.disconnect();
+          video.preload = "auto";
+          video.src = videoSrc;
+          video.load();
+        },
+        { rootMargin: "200% 0px" }
+      );
+      io.observe(container);
+      cleanups.push(() => io.disconnect());
 
       let targetTime = 0;
       let active = false;
