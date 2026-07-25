@@ -20,7 +20,8 @@ export default function Home() {
         justifyContent: "center",
         background: "#0f2f11",
         color: "#f5efe0",
-        fontFamily: "var(--font-display), Georgia, serif",
+        // Outside the full-root wrapper, so --font-display is not defined here.
+        fontFamily: "'EB Garamond', Georgia, serif",
         fontStyle: "italic",
         fontSize: "30px",
         letterSpacing: "0.4px",

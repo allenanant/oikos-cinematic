@@ -77,7 +77,7 @@ export default function ServiceDetail({ data }: { data: ServiceData }) {
                     <img
                       src={px(s.image, 1240, 620)}
                       srcSet={pxSet(s.image, [620, 900, 1240], 2)}
-                      sizes="(max-width: 680px) 100vw, (max-width: 1024px) 45vw, 30vw"
+                      sizes="(max-width: 680px) 100vw, 45vw"
                       alt={s.alt}
                       width={1240}
                       height={620}

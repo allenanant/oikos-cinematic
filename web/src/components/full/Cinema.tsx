@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import {
+  BUFFER_TIMEOUT_MS,
   canPlayVideo,
   isFullyBuffered,
   SEEK_EPS,
@@ -61,7 +62,10 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
             },
           }
         );
-        cleanups.push(() => captionTween.scrollTrigger?.kill());
+        cleanups.push(() => {
+          captionTween.scrollTrigger?.kill();
+          captionTween.kill();
+        });
       }
 
       // See CinematicHero for the rationale. On mobile this section becomes a
@@ -95,9 +99,12 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
       let ready = false;
       let seekRaf = 0;
 
+      let bufferTimer = 0;
+
       const markReady = () => {
         if (ready || !isFullyBuffered(video)) return;
         ready = true;
+        clearTimeout(bufferTimer);
         // reverse: this section opens on the LAST frame.
         if (reverse) targetTime = Math.max(video.duration - 0.01, 0);
         container.dataset.videoReady = "true";
@@ -105,10 +112,6 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
       };
       video.addEventListener("progress", markReady);
       video.addEventListener("canplaythrough", markReady);
-      cleanups.push(() => {
-        video.removeEventListener("progress", markReady);
-        video.removeEventListener("canplaythrough", markReady);
-      });
 
       // Some browsers refuse to paint a <video> that has never played. Prime it
       // muted, then park it on the frame this section should open on.
@@ -117,7 +120,12 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
           .play()
           .then(() => {
             video.pause();
-            video.currentTime = reverse ? Math.max(video.duration - 0.01, 0) : 0;
+            // Don't undo a seek markReady has already applied.
+            if (!ready) {
+              video.currentTime = reverse
+                ? Math.max(video.duration - 0.01, 0)
+                : 0;
+            }
           })
           .catch(() => video.pause());
       };
@@ -143,7 +151,29 @@ export default function Cinema({ videoSrc, posterSrc, reverse = false }: Props) 
         },
       });
       cleanups.push(() => st.kill());
+      // onToggle does not fire on creation — seed it so a deep link into this
+      // section still scrubs.
       active = st.isActive;
+
+      // Never buffered? Drop the pin instead of trapping the visitor in a
+      // frozen section; they get the static poster block.
+      bufferTimer = window.setTimeout(() => {
+        if (ready) return;
+        container.dataset.video = "off";
+        video.removeAttribute("src");
+        video.load();
+        st.kill();
+        ScrollTrigger.refresh();
+      }, BUFFER_TIMEOUT_MS);
+
+      cleanups.push(() => {
+        clearTimeout(bufferTimer);
+        video.removeEventListener("progress", markReady);
+        video.removeEventListener("canplaythrough", markReady);
+        video.removeEventListener("loadeddata", prime);
+        video.removeAttribute("src");
+        video.load(); // abort any in-flight fetch
+      });
 
       const applySeek = () => {
         seekRaf = requestAnimationFrame(applySeek);

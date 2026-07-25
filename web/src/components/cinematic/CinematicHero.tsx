@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import {
+  BUFFER_TIMEOUT_MS,
   canPlayVideo,
   isFullyBuffered,
   SEEK_EPS,
@@ -72,18 +73,17 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
       let ready = false;
       let seekRaf = 0;
 
+      let bufferTimer = 0;
+
       const markReady = () => {
         if (ready || !isFullyBuffered(video)) return;
         ready = true;
+        clearTimeout(bufferTimer);
         container.dataset.videoReady = "true"; // CSS cross-fades video over poster
         video.currentTime = targetTime;
       };
       video.addEventListener("progress", markReady);
       video.addEventListener("canplaythrough", markReady);
-      cleanups.push(() => {
-        video.removeEventListener("progress", markReady);
-        video.removeEventListener("canplaythrough", markReady);
-      });
 
       // Some browsers refuse to paint a <video> that has never played, leaving a
       // black box under the cross-fade. Prime it muted, then park it.
@@ -92,7 +92,9 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
           .play()
           .then(() => {
             video.pause();
-            video.currentTime = 0;
+            // markReady may already have seeked to the scroll position; don't
+            // yank it back to the start.
+            if (!ready) video.currentTime = 0;
           })
           .catch(() => video.pause());
       };
@@ -121,7 +123,31 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
         },
       });
       cleanups.push(() => st.kill());
+      // onToggle does not fire on creation, so seed it — otherwise a deep link
+      // or a mid-page refresh lands inside the pinned section with active=false
+      // and the clip never scrubs.
       active = st.isActive;
+
+      // If it never finishes buffering, drop the pin rather than trapping the
+      // visitor in a frozen section. Degrades to the static poster block that
+      // mobile already gets.
+      bufferTimer = window.setTimeout(() => {
+        if (ready) return;
+        container.dataset.video = "off";
+        video.removeAttribute("src");
+        video.load();
+        st.kill();
+        ScrollTrigger.refresh();
+      }, BUFFER_TIMEOUT_MS);
+
+      cleanups.push(() => {
+        clearTimeout(bufferTimer);
+        video.removeEventListener("progress", markReady);
+        video.removeEventListener("canplaythrough", markReady);
+        video.removeEventListener("loadeddata", prime);
+        video.removeAttribute("src");
+        video.load(); // abort any in-flight fetch
+      });
 
       const fadeTween = gsap.to(
         container.querySelector(".cinematic-foreground"),
@@ -137,7 +163,10 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
           },
         }
       );
-      cleanups.push(() => fadeTween.scrollTrigger?.kill());
+      cleanups.push(() => {
+        fadeTween.scrollTrigger?.kill();
+        fadeTween.kill();
+      });
 
       const applySeek = () => {
         seekRaf = requestAnimationFrame(applySeek);

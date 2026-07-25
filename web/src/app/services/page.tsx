@@ -114,14 +114,16 @@ export default function ServicesPage() {
               </h1>
             </div>
             <div className="svc-hero-img" data-reveal>
-              {/* 4/5 slot, ~409x511 desktop. Was a 1200x1500 source. */}
+              {/* Full-bleed: full.css:2195 overrides this slot to
+                  position:absolute;inset:0 with object-fit:cover, so it covers
+                  the viewport at every width. Landscape crop, sizes 100vw. */}
               <img
-                src={px(SVC_HERO, 840, 1050)}
-                srcSet={pxSet(SVC_HERO, [420, 620, 840], 4 / 5)}
-                sizes="(max-width: 1100px) 100vw, 30vw"
+                src={px(SVC_HERO, 2000, 1125)}
+                srcSet={pxSet(SVC_HERO, [1000, 1400, 2000], 16 / 9)}
+                sizes="100vw"
                 alt="Modern office with wooden furniture and plants"
-                width={840}
-                height={1050}
+                width={2000}
+                height={1125}
                 fetchPriority="high"
                 decoding="async"
               />

@@ -22,6 +22,17 @@ export const SRC_FPS = 24;
 /** Just under one frame, so we never flush the decoder for the frame already shown. */
 export const SEEK_EPS = 0.9 / SRC_FPS;
 
+/**
+ * How long to wait for a full buffer before giving up on the video.
+ *
+ * Without this, a stalled download leaves `ready` false forever while the
+ * ScrollTrigger pin is already in place — so the visitor scrolls roughly two
+ * and a half viewports through a frozen poster with no way out. On timeout the
+ * caller drops the pin and the section degrades to the static poster block
+ * mobile already gets.
+ */
+export const BUFFER_TIMEOUT_MS = 10_000;
+
 export function canPlayVideo(): boolean {
   if (typeof window === "undefined") return false;
 

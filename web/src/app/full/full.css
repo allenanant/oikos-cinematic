@@ -96,7 +96,9 @@
 }
 .full-pill .brand .logo {
   height: 26px;
-  width: auto;
+  /* Pinned rather than auto: the SVG's true ratio (1141:751) resolves to
+     39.5px, so `auto` reflowed the pill by half a pixel once it parsed. */
+  width: 40px;
   display: block;
 }
 .full-pill .divider {

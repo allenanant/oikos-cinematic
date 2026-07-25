@@ -81,9 +81,9 @@ export default function Transform() {
           <span className="full-ba-label before">Before</span>
           <div className="full-ba-img full-ba-before">
             <img
-              src={px(BEFORE_IMG, 1800, 771)}
+              src={px(BEFORE_IMG, 1800, 772)}
               srcSet={pxSet(BEFORE_IMG, [1200, 1800, 2400], 2400 / 1029)}
-              sizes="100vw"
+              sizes="(min-width: 1480px) 1480px, 100vw"
               alt="A bare, cool open-plan office before restructure"
               width={1800}
               height={771}
@@ -98,18 +98,18 @@ export default function Transform() {
               <source
                 type="image/avif"
                 srcSet={`${BASE}/photos/nature-after-1200.avif 1200w, ${BASE}/photos/nature-after-1800.avif 1800w, ${BASE}/photos/nature-after-2400.avif 2400w`}
-                sizes="100vw"
+                sizes="(min-width: 1480px) 1480px, 100vw"
               />
               <source
                 type="image/webp"
                 srcSet={`${BASE}/photos/nature-after-1200.webp 1200w, ${BASE}/photos/nature-after-1800.webp 1800w, ${BASE}/photos/nature-after-2400.webp 2400w`}
-                sizes="100vw"
+                sizes="(min-width: 1480px) 1480px, 100vw"
               />
               <img
                 src={`${BASE}/photos/nature-after.jpg`}
                 alt="The same floor restructured, warm with plants, wood and daylight"
-                width={1915}
-                height={821}
+                width={1800}
+                height={772}
                 loading="lazy"
                 decoding="async"
               />

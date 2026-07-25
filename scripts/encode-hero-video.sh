@@ -12,10 +12,13 @@
 #   an overlay and text. At 1600 wide the measured VMAF is the same as 1080p at
 #   a smaller size (3.22 MB vs 3.78 MB for the same score).
 #
-#   AV1 ships first, H.264 as the fallback source. AV1 lands at roughly half the
-#   H.264 size at higher quality.
+#   H.264 only. AV1 measured 1.21 MB at VMAF 92.4 (smaller AND better), but
+#   browser seek behaviour under scroll-scrubbing is the risk, and these clips
+#   are scrubbed rather than played. Not worth the gamble on a client site
+#   without an A/B; revisit with real measurements if the size matters.
 #
-# Usage: bash scripts/encode-hero-video.sh
+# Usage: bash scripts/encode-hero-video.sh            # both clips, default frames
+#        bash scripts/encode-hero-video.sh hero:0     # one clip, explicit frame
 set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -27,10 +30,10 @@ WIDTH=1600
 HEIGHT=900
 GOP=12
 X264_CRF=23
-AV1_CRF=34
 
 encode_one() {
   local name="$1"           # e.g. "hero"
+  local poster_frame="$2"   # frame the section OPENS on - see the note below
   local src="$SRC_DIR/$name-source.mp4"
 
   if [ ! -f "$src" ]; then
@@ -47,34 +50,34 @@ encode_one() {
     -pix_fmt yuv420p -movflags +faststart \
     "$OUT_DIR/$name.mp4"
 
-  echo "==> $name : AV1 ${WIDTH}x${HEIGHT} GOP${GOP} CRF${AV1_CRF}"
-  ffmpeg -v error -y -i "$src" -an \
-    -vf "scale=${WIDTH}:${HEIGHT}" \
-    -c:v libsvtav1 -preset 4 -crf "$AV1_CRF" \
-    -g "$GOP" \
-    -pix_fmt yuv420p -movflags +faststart \
-    "$OUT_DIR/$name.av1.mp4" 2>/dev/null
-
-  echo "==> $name : posters"
-  # Last frame is the "after" state — the one worth showing when the video
-  # never plays (mobile) or has not buffered yet.
+  echo "==> $name : poster from frame $poster_frame"
+  # The poster MUST be the frame the section opens on, or the cross-fade from
+  # poster to video is a visible jump in the camera position. `hero` scrubs
+  # forward from t=0, so it opens on frame 0. `hero-v2` is rendered with
+  # `reverse`, so it opens on the last frame. It is also the only image mobile
+  # ever sees, since the video never loads there.
   ffmpeg -v error -y -i "$src" \
-    -vf "select=eq(n\,192),scale=${WIDTH}:-2" -fps_mode passthrough -frames:v 1 \
+    -vf "select=eq(n\,${poster_frame}),scale=${WIDTH}:-2" -fps_mode passthrough -frames:v 1 \
     "$OUT_DIR/$name-poster.png"
 
-  ffmpeg -v error -y -i "$OUT_DIR/$name-poster.png" \
-    -c:v libaom-av1 -still-picture 1 -crf 40 -cpu-used 6 -f avif \
-    "$OUT_DIR/$name-poster.avif" 2>/dev/null
+  # WebP only: it is both the `poster` attribute and the CSS background, so one
+  # file is one request. AVIF would save ~6 KB and cost a second format to keep
+  # in sync. Support is universal from Safari 14.
   ffmpeg -v error -y -i "$OUT_DIR/$name-poster.png" \
     -c:v libwebp -quality 60 "$OUT_DIR/$name-poster.webp"
-  ffmpeg -v error -y -i "$OUT_DIR/$name-poster.png" \
-    -q:v 5 "$OUT_DIR/$name-poster.jpg"
   rm -f "$OUT_DIR/$name-poster.png"
 }
 
+# <clip>:<poster frame>. 192 is the last frame of a 193-frame clip.
+# Set positionally rather than via "${@:-...}", which expands the whole default
+# as a single word.
+if [ "$#" -eq 0 ]; then
+  set -- hero:0 hero-v2:192
+fi
+
 # One at a time — never run these encodes concurrently.
-for name in "$@"; do
-  encode_one "$name"
+for spec in "$@"; do
+  encode_one "${spec%%:*}" "${spec##*:}"
 done
 
 echo
