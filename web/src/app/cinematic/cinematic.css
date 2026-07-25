@@ -122,6 +122,9 @@
 /* Very soft bottom-only vignette so the title sits cleanly on busy frames */
 .cinematic-overlay {
   position: absolute; inset: 0;
+  /* Above the video, which is z-index:1 - otherwise the vignette disappears
+     as the clip cross-fades in and the headline loses its contrast. */
+  z-index: 2;
   background: linear-gradient(180deg, transparent 50%, rgba(11, 57, 16, 0.55) 100%);
   pointer-events: none;
 }

@@ -474,6 +474,7 @@
 }
 .full-cinema .cinema-overlay {
   position: absolute; inset: 0;
+  z-index: 2; /* above the video (z-index:1) - see cinematic.css */
   pointer-events: none;
   background:
     radial-gradient(120% 60% at 50% 100%, rgba(11, 57, 16, 0.7), transparent 60%),

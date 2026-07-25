@@ -6,8 +6,10 @@ import {
   BUFFER_TIMEOUT_MS,
   canPlayVideo,
   isFullyBuffered,
+  lastFrameTime,
   SEEK_EPS,
   SRC_FPS,
+  watchEligibility,
 } from "@/lib/videoGate";
 
 type Props = { videoSrc: string; posterSrc?: string; subtitle?: string };
@@ -23,6 +25,7 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
   useEffect(() => {
     let cancelled = false;
     const cleanups: Array<() => void> = [];
+    let teardownVideo: (() => void) | null = null;
 
     (async () => {
       const [gsapMod, stMod] = await Promise.all([
@@ -35,123 +38,118 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
       const ScrollTrigger = stMod.ScrollTrigger ?? stMod.default;
       gsap.registerPlugin(ScrollTrigger);
 
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const container = containerRef.current!;
       const video = videoRef.current!;
       const titleSpans = container.querySelectorAll<HTMLSpanElement>(
         ".cinematic-title .row > span"
       );
 
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
       if (reduceMotion) {
         gsap.set(titleSpans, { yPercent: 0, opacity: 1 });
-        return;
+      } else {
+        gsap.set(titleSpans, { yPercent: 110, opacity: 1 });
+        const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+        tl.to(titleSpans, { yPercent: 0, duration: 1.2, stagger: 0.13, delay: 0.25 });
+        cleanups.push(() => tl.kill());
       }
 
-      gsap.set(titleSpans, { yPercent: 110, opacity: 1 });
-      const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-      tl.to(titleSpans, { yPercent: 0, duration: 1.2, stagger: 0.13, delay: 0.25 });
-      cleanups.push(() => tl.kill());
+      /**
+       * Everything that costs bytes or CPU. Only runs on devices that passed the
+       * gate, and returns a teardown so it can all be undone if the window is
+       * resized down to phone width or the page comes back from bfcache.
+       */
+      const activate = (): (() => void) => {
+        container.dataset.video = "on";
 
-      // Phones, tablets, Save-Data and reduced-motion stop here. Nothing has
-      // requested the clip yet (the <video> ships with no src), so bailing out
-      // costs zero bytes. Without the pin the section is a plain 100vh poster
-      // block, which is what the CSS already declares — no layout to repair.
-      if (!canPlayVideo()) {
-        container.dataset.video = "off";
-        ScrollTrigger.refresh();
-        return;
-      }
-      container.dataset.video = "on";
-
-      // Only now do bytes move.
-      video.preload = "auto";
-      video.src = videoSrc;
-      video.load();
-
-      let targetTime = 0;
-      let active = false;
-      let ready = false;
-      let seekRaf = 0;
-
-      let bufferTimer = 0;
-
-      const markReady = () => {
-        if (ready || !isFullyBuffered(video)) return;
-        ready = true;
-        clearTimeout(bufferTimer);
-        container.dataset.videoReady = "true"; // CSS cross-fades video over poster
-        video.currentTime = targetTime;
-      };
-      video.addEventListener("progress", markReady);
-      video.addEventListener("canplaythrough", markReady);
-
-      // Some browsers refuse to paint a <video> that has never played, leaving a
-      // black box under the cross-fade. Prime it muted, then park it.
-      const prime = () => {
-        video
-          .play()
-          .then(() => {
-            video.pause();
-            // markReady may already have seeked to the scroll position; don't
-            // yank it back to the start.
-            if (!ready) video.currentTime = 0;
-          })
-          .catch(() => video.pause());
-      };
-      video.addEventListener("loadeddata", prime, { once: true });
-
-      // Create the pin on MOUNT — not inside a video-load callback. Inserting
-      // the pin-spacer late (after loadedmetadata) shifts the layout and makes
-      // the next section pop in mid-scroll. The seek itself is duration-guarded
-      // below, so it is safe to pin before the video reports its duration.
-      const st = ScrollTrigger.create({
-        trigger: container,
-        start: "top top",
-        end: PIN_END,
-        pin: true,
-        scrub: SCRUB,
-        // Seek only while the section is pinned. This loop used to run from
-        // mount to unmount, burning a frame callback forever on a section the
-        // user had scrolled past screens ago.
-        onToggle: (self: { isActive: boolean }) => {
-          active = self.isActive;
-        },
-        onUpdate: (self: { progress: number }) => {
-          if (isFinite(video.duration) && video.duration) {
-            targetTime = self.progress * video.duration;
-          }
-        },
-      });
-      cleanups.push(() => st.kill());
-      // onToggle does not fire on creation, so seed it — otherwise a deep link
-      // or a mid-page refresh lands inside the pinned section with active=false
-      // and the clip never scrubs.
-      active = st.isActive;
-
-      // If it never finishes buffering, drop the pin rather than trapping the
-      // visitor in a frozen section. Degrades to the static poster block that
-      // mobile already gets.
-      bufferTimer = window.setTimeout(() => {
-        if (ready) return;
-        container.dataset.video = "off";
-        video.removeAttribute("src");
+        video.preload = "auto";
+        video.src = videoSrc;
         video.load();
-        st.kill();
-        ScrollTrigger.refresh();
-      }, BUFFER_TIMEOUT_MS);
 
-      cleanups.push(() => {
-        clearTimeout(bufferTimer);
-        video.removeEventListener("progress", markReady);
-        video.removeEventListener("canplaythrough", markReady);
-        video.removeEventListener("loadeddata", prime);
-        video.removeAttribute("src");
-        video.load(); // abort any in-flight fetch
-      });
+        // Raw scroll progress, kept whether or not duration is known yet.
+        // Storing only the derived time meant a refresh mid-pin sat on frame 0
+        // until the visitor scrolled again.
+        let progress = 0;
+        let ready = false;
+        let seekRaf = 0;
+        let running = false;
+        let bufferTimer = 0;
 
-      const fadeTween = gsap.to(
-        container.querySelector(".cinematic-foreground"),
-        {
+        const timeFor = (p: number) =>
+          isFinite(video.duration) && video.duration
+            ? Math.min(p * video.duration, lastFrameTime(video))
+            : 0;
+
+        const applySeek = () => {
+          if (!running) return;
+          seekRaf = requestAnimationFrame(applySeek);
+          if (!ready || document.hidden || video.seeking) return;
+          const t = Math.round(timeFor(progress) * SRC_FPS) / SRC_FPS;
+          if (Math.abs(video.currentTime - t) > SEEK_EPS) video.currentTime = t;
+        };
+
+        // Start and stop the loop outright rather than letting it wake every
+        // frame and bail — two sections idling at 60fps for the whole session
+        // is the thing this was meant to fix.
+        const startLoop = () => {
+          if (running) return;
+          running = true;
+          seekRaf = requestAnimationFrame(applySeek);
+        };
+        const stopLoop = () => {
+          running = false;
+          cancelAnimationFrame(seekRaf);
+          // Apply one last seek on the way out. onToggle fires at the pin
+          // boundary, so without this the final scroll of the range never
+          // lands and the clip freezes short of its end frame.
+          if (ready && !video.seeking) video.currentTime = timeFor(progress);
+        };
+
+        const markReady = () => {
+          if (ready || !isFullyBuffered(video)) return;
+          ready = true;
+          clearTimeout(bufferTimer);
+          container.dataset.videoReady = "true"; // CSS cross-fades video over poster
+          video.currentTime = timeFor(progress);
+        };
+        video.addEventListener("progress", markReady);
+        video.addEventListener("canplaythrough", markReady);
+
+        // Some browsers refuse to paint a <video> that has never played, leaving
+        // a black box under the cross-fade. Prime it muted, then park it.
+        const prime = () => {
+          video
+            .play()
+            .then(() => {
+              video.pause();
+              // Don't undo a seek markReady already applied.
+              if (!ready) video.currentTime = timeFor(progress);
+            })
+            .catch(() => video.pause());
+        };
+        video.addEventListener("loadeddata", prime, { once: true });
+
+        // Create the pin on MOUNT — not inside a video-load callback. Inserting
+        // the pin-spacer late (after loadedmetadata) shifts the layout and makes
+        // the next section pop in mid-scroll. Seeking is duration-guarded above,
+        // so it is safe to pin before the video reports its duration.
+        const st = ScrollTrigger.create({
+          trigger: container,
+          start: "top top",
+          end: PIN_END,
+          pin: true,
+          scrub: SCRUB,
+          onToggle: (self: { isActive: boolean }) =>
+            self.isActive ? startLoop() : stopLoop(),
+          onUpdate: (self: { progress: number }) => {
+            progress = self.progress;
+          },
+        });
+
+        const fadeTween = gsap.to(container.querySelector(".cinematic-foreground"), {
           yPercent: -14,
           opacity: 0,
           ease: "none",
@@ -161,27 +159,60 @@ export default function CinematicHero({ videoSrc, posterSrc, subtitle }: Props) 
             end: "+=120%",
             scrub: true,
           },
-        }
-      );
-      cleanups.push(() => {
-        fadeTween.scrollTrigger?.kill();
-        fadeTween.kill();
-      });
+        });
 
-      const applySeek = () => {
-        seekRaf = requestAnimationFrame(applySeek);
-        if (!active || !ready || document.hidden || video.seeking) return;
-        const t = Math.round(targetTime * SRC_FPS) / SRC_FPS; // snap to frame grid
-        if (Math.abs(video.currentTime - t) > SEEK_EPS) video.currentTime = t;
+        const teardown = () => {
+          clearTimeout(bufferTimer);
+          stopLoop();
+          st.kill();
+          fadeTween.scrollTrigger?.kill();
+          fadeTween.kill();
+          video.removeEventListener("progress", markReady);
+          video.removeEventListener("canplaythrough", markReady);
+          video.removeEventListener("loadeddata", prime);
+          video.pause();
+          video.removeAttribute("src");
+          video.load(); // abort any in-flight fetch
+          delete container.dataset.videoReady;
+        };
+
+        // onToggle does not fire on creation, so seed it — otherwise a deep link
+        // or a mid-page refresh lands inside the pinned section and never scrubs.
+        progress = st.progress;
+        if (st.isActive) startLoop();
+
+        // The timer starts with the download, not on mount.
+        bufferTimer = window.setTimeout(() => {
+          if (ready) return;
+          teardown();
+          container.dataset.video = "off";
+          ScrollTrigger.refresh();
+        }, BUFFER_TIMEOUT_MS);
+
+        return teardown;
       };
-      seekRaf = requestAnimationFrame(applySeek);
-      cleanups.push(() => cancelAnimationFrame(seekRaf));
 
+      const sync = () => {
+        const allowed = canPlayVideo();
+        if (allowed && !teardownVideo) {
+          teardownVideo = activate();
+          ScrollTrigger.refresh();
+        } else if (!allowed && teardownVideo) {
+          teardownVideo();
+          teardownVideo = null;
+          container.dataset.video = "off";
+          ScrollTrigger.refresh();
+        }
+      };
+
+      sync();
+      cleanups.push(watchEligibility(sync));
       ScrollTrigger.refresh();
     })();
 
     return () => {
       cancelled = true;
+      teardownVideo?.();
       cleanups.forEach((c) => c());
     };
   }, [videoSrc]);

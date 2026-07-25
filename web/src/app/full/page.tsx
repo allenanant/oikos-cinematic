@@ -19,15 +19,15 @@ export default function FullPage() {
       <Cursor />
       <FullNav active="home" />
       <CinematicHero
-        videoSrc={`${BASE}/cinematic/hero.mp4?v=8`}
-        posterSrc={`${BASE}/cinematic/hero-poster.webp?v=8`}
+        videoSrc={`${BASE}/cinematic/hero.mp4?v=9`}
+        posterSrc={`${BASE}/cinematic/hero-poster.webp?v=9`}
       />
       <main className="full-flow">
         <Overture />
         <WhatWeDo />
         <Cinema
-          videoSrc={`${BASE}/cinematic/hero-v2.mp4?v=8`}
-          posterSrc={`${BASE}/cinematic/hero-v2-poster.webp?v=8`}
+          videoSrc={`${BASE}/cinematic/hero-v2.mp4?v=9`}
+          posterSrc={`${BASE}/cinematic/hero-v2-poster.webp?v=9`}
           reverse
         />
         <WhyMatters />
